@@ -60,7 +60,9 @@ class _RegisterViewState extends State<RegisterView> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    "nursing app at your sevice",
+                    Localizations.localeOf(context).languageCode == 'ar'
+                        ? 'تطبيق التمريض في خدمتك'
+                        : 'Nursing app at your service',
                     style: TextStyle(color: Colors.white),
                   ),
                   backgroundColor: ColorGuide.mainColor,
@@ -84,7 +86,9 @@ class _RegisterViewState extends State<RegisterView> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    "nursing app at your sevice",
+                    Localizations.localeOf(context).languageCode == 'ar'
+                        ? 'تطبيق التمريض في خدمتك'
+                        : 'Nursing app at your service',
                     style: TextStyle(color: Colors.white),
                   ),
                   backgroundColor: ColorGuide.mainColor,
@@ -109,7 +113,6 @@ class _RegisterViewState extends State<RegisterView> {
                   state is AuthenticationGoogleLoading ||
                   state is RegisterLoading,
               child: Scaffold(
-                backgroundColor: Colors.white,
                 body: Stack(
                   children: [
                     Padding(
@@ -139,19 +142,43 @@ class _RegisterViewState extends State<RegisterView> {
                               height: ScreenSize.height * 0.0890557 * 1.5,
                             ),
                             CustomMainText(
-                              txt: 'Hello! Register to get started',
+                              txt:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'مرحبًا! أنشئ حسابك للبدء'
+                                  : 'Hello! Register to get started',
                             ),
+
                             SizedBox(height: ScreenSize.height * 0.016094 * 2),
                             CustomInputField(
                               fieldKey: nameKey,
-                              hint: "Enter your name",
-                              label: 'User name',
+                              hint:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أدخل اسمك'
+                                  : 'Enter your name',
+                              label:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'اسم المستخدم'
+                                  : 'User name',
                               fieldController: nameController,
                               isPassword: false,
                               textInputType: TextInputType.text,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'This field is required';
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'هذا الحقل مطلوب'
+                                      : 'This field is required';
                                 } else {
                                   return null;
                                 }
@@ -160,16 +187,38 @@ class _RegisterViewState extends State<RegisterView> {
                             SizedBox(height: ScreenSize.height * 0.016094),
                             CustomInputField(
                               fieldKey: emailKey,
-                              hint: "Enter your email",
-                              label: 'Email',
+                              hint:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أدخل بريدك الإلكتروني'
+                                  : 'Enter your email',
+                              label:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'البريد الإلكتروني'
+                                  : 'Email',
                               fieldController: eamilController,
                               isPassword: false,
                               textInputType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'This field is required';
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'هذا الحقل مطلوب'
+                                      : 'This field is required';
                                 } else if (!value.contains('@')) {
-                                  return "Enter a valid email";
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'أدخل بريدًا إلكترونيًا صحيحًا'
+                                      : 'Enter a valid email';
                                 } else {
                                   return null;
                                 }
@@ -179,8 +228,21 @@ class _RegisterViewState extends State<RegisterView> {
 
                             CustomInputField(
                               fieldKey: passwordKey,
-                              hint: "Enter your password",
-                              label: 'password',
+                              hint:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أدخل كلمة المرور'
+                                  : 'Enter your password',
+                              label:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'كلمة المرور'
+                                  : 'Password',
+
                               fieldController: passwordController,
                               isPassword: true,
                               textInputType: TextInputType.text,
@@ -192,7 +254,12 @@ class _RegisterViewState extends State<RegisterView> {
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'This field is required';
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'هذا الحقل مطلوب'
+                                      : 'This field is required';
                                 } else {
                                   return null;
                                 }
@@ -201,8 +268,20 @@ class _RegisterViewState extends State<RegisterView> {
                             SizedBox(height: ScreenSize.height * 0.016094),
                             CustomInputField(
                               fieldKey: passwordConfirmationKey,
-                              hint: "Confirm your password",
-                              label: 'Confirmation',
+                              hint:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'تأكيد كلمة المرور'
+                                  : 'Confirm your password',
+                              label:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'تأكيد'
+                                  : 'Confirmation',
                               fieldController: confirmController,
                               isPassword: true,
                               textInputType: TextInputType.text,
@@ -214,7 +293,12 @@ class _RegisterViewState extends State<RegisterView> {
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'This field is required';
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'هذا الحقل مطلوب'
+                                      : 'This field is required';
                                 } else {
                                   return null;
                                 }
@@ -243,7 +327,13 @@ class _RegisterViewState extends State<RegisterView> {
                                   );
                                 }
                               },
-                              txt: "Register",
+                              txt:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'إنشاء حساب'
+                                  : 'Register',
                               active: true,
                               width: ScreenSize.width,
                               height: ScreenSize.height * 0.068,
@@ -267,12 +357,18 @@ class _RegisterViewState extends State<RegisterView> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
-                                  "Already have an account?",
+                                  Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'لديك حساب بالفعل؟'
+                                      : 'Already have an account?',
                                   style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: ScreenSize.height * 0.015,
+                                    color: Theme.of(context).hintColor,
+                                    fontSize: ScreenSize.height * 0.017,
                                   ),
                                 ),
+
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(
@@ -280,10 +376,15 @@ class _RegisterViewState extends State<RegisterView> {
                                     ).pushNamed(LoginView.routeName);
                                   },
                                   child: Text(
-                                    'Log in',
+                                    Localizations.localeOf(
+                                              context,
+                                            ).languageCode ==
+                                            'ar'
+                                        ? 'تسجيل الدخول'
+                                        : 'Log in',
                                     style: TextStyle(
-                                      color: ColorGuide.mainColor,
-                                      fontSize: ScreenSize.height * 0.015,
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: ScreenSize.height * 0.017,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

@@ -30,19 +30,28 @@ class CustomInputField extends StatelessWidget {
     return Form(
       key: fieldKey,
       child: TextFormField(
+        style: TextStyle(color: Theme.of(context).hintColor),
         controller: fieldController,
         validator: validator,
         obscureText: isObsecured,
         keyboardType: textInputType,
         decoration: InputDecoration(
           isDense: true,
-          fillColor: Color(0xffF7F8F9),
+          fillColor: Theme.of(context).secondaryHeaderColor,
           filled: true,
-          hint: Text(hint),
-          label: Text(label, style: TextStyle(color: ColorGuide.mainColor)),
+          hint: Text(
+            hint,
+            style: TextStyle(color: Theme.of(context).hintColor),
+          ),
+
+          label: Text(
+            label,
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
           suffixIcon: isPassword
               ? IconButton(
                   onPressed: onTap,
+                  color: Theme.of(context).primaryColor,
                   icon: !isObsecured
                       ? Icon(Icons.visibility_off_outlined)
                       : Icon(Icons.visibility_outlined),
@@ -54,7 +63,7 @@ class CustomInputField extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(ScreenSize.height * 0.015),
-            borderSide: BorderSide(color: ColorGuide.mainColor),
+            borderSide: BorderSide(color: Theme.of(context).primaryColor),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(ScreenSize.height * 0.015),

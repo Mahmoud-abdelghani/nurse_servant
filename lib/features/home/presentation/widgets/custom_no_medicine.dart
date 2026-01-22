@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show TextButton, Colors, MaterialButton;
+import 'package:flutter/material.dart'
+    show Colors, MaterialButton, TextButton, Theme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurse_servant/core/utils/color_guide.dart';
 import 'package:nurse_servant/core/utils/screen_size.dart';
@@ -16,9 +17,11 @@ class CustomNoMedicine extends StatelessWidget {
         Image.asset('assets/reminder_12570772.png'),
         SizedBox(height: ScreenSize.height * 0.035),
         Text(
-          'Manage your meds',
+          Localizations.localeOf(context).languageCode == 'ar'
+              ? 'إدارة أدويتك'
+              : 'Manage your meds',
           style: TextStyle(
-            color: ColorGuide.mainColor,
+            color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.bold,
             fontSize: ScreenSize.height * 0.035,
           ),
@@ -26,9 +29,11 @@ class CustomNoMedicine extends StatelessWidget {
 
         Text(
           textAlign: TextAlign.center,
-          'Add your meds to be reminded on time and track your health ',
+          Localizations.localeOf(context).languageCode == 'ar'
+              ? 'أضف أدويتك لتلقي تذكيرات في الوقت المناسب ومتابعة صحتك'
+              : 'Add your meds to be reminded on time and track your health ',
           style: TextStyle(
-            color: Colors.grey,
+            color: Theme.of(context).dividerColor,
             fontWeight: FontWeight.w400,
             fontSize: ScreenSize.height * 0.02,
           ),
@@ -47,13 +52,15 @@ class CustomNoMedicine extends StatelessWidget {
             horizontal: ScreenSize.width * 0.055,
             vertical: ScreenSize.height * 0.01,
           ),
-          color: Colors.amber,
+          color: Theme.of(context).primaryColorDark,
           child: Text(
-            'Add medicine',
+            Localizations.localeOf(context).languageCode == 'ar'
+                ? 'اضافة دواء'
+                : 'Add medicine',
             style: TextStyle(
               fontSize: ScreenSize.height * 0.035,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
           ),
         ),
@@ -64,7 +71,9 @@ class CustomNoMedicine extends StatelessWidget {
             BlocProvider.of<AuthenticationCubit>(context).logout();
           },
           child: Text(
-            'Sign out',
+            Localizations.localeOf(context).languageCode == 'ar'
+                ? 'تسجيل الخروج'
+                : 'Sign out',
             style: TextStyle(
               color: Colors.red,
               fontSize: ScreenSize.height * 0.025,

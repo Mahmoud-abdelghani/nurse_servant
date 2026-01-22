@@ -7,7 +7,7 @@ class CustomGoogleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:ontap ,
+      onTap: ontap,
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical: ScreenSize.height * 0.015,
@@ -17,9 +17,23 @@ class CustomGoogleButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(ScreenSize.height * 0.01),
           color: Colors.transparent,
-          border: Border.all(color: Colors.grey),
+          border: Border.all(color: Theme.of(context).dividerColor),
         ),
-        child: Image.asset('assets/Group 162.png'),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Image.asset('assets/icons8-google-48 1.png'),
+            Text(
+              Localizations.localeOf(context).languageCode == 'ar'
+                  ? 'تسجيل الدخول باستخدام جوجل'
+                  : 'Sign in with Google',
+              style: TextStyle(
+                color: Theme.of(context).hintColor,
+                fontSize: ScreenSize.height * 0.02,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

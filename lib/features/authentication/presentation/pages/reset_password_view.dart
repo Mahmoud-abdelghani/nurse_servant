@@ -55,7 +55,6 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
         return ModalProgressHUD(
           inAsyncCall: state is ResetPasswordLoading,
           child: Scaffold(
-            backgroundColor: Colors.white,
             body: Stack(
               children: [
                 Padding(
@@ -87,7 +86,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         Text(
                           'Don\'t worry! It occurs. Please enter the email address linked with your account.',
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Theme.of(context).dividerColor,
                             fontSize: ScreenSize.height * 0.017,
                             fontWeight: FontWeight.w600,
                           ),
@@ -160,14 +159,14 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           height: ScreenSize.height * 0.068,
                         ),
 
-                        SizedBox(height: ScreenSize.height * 0.350557),
+                        SizedBox(height: ScreenSize.height * 0.250557),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
                               "Remember Password?",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).hintColor,
                                 fontSize: ScreenSize.height * 0.02,
                               ),
                             ),

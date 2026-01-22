@@ -11,7 +11,7 @@ class CustomMainText extends StatelessWidget {
     return Text(
       txt,
       style: TextStyle(
-        color: ColorGuide.mainColor,
+        color: Theme.of(context).primaryColor,
         fontSize: ScreenSize.height * 0.0321,
         fontWeight: FontWeight.bold,
       ),

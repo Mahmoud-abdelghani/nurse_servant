@@ -11,6 +11,8 @@ class MedicineModelTypeAdapter extends TypeAdapter<MedicineModel> {
       amount: reader.readInt(),
       endAt: DateTime.fromMillisecondsSinceEpoch(reader.readInt()),
       alarmAt: reader.readString(),
+      rebeatEvery: reader.readString(),
+      nextDose: reader.readString(),
     );
   }
 
@@ -23,7 +25,9 @@ class MedicineModelTypeAdapter extends TypeAdapter<MedicineModel> {
     writer.writeString(obj.type);
     writer.writeString(obj.dose);
     writer.writeInt(obj.amount);
-    writer.writeInt(obj.endAt.microsecondsSinceEpoch);
+    writer.writeInt(obj.endAt.millisecondsSinceEpoch);
     writer.writeString(obj.alarmAt);
+    writer.writeString(obj.rebeatEvery);
+    writer.writeString(obj.nextDose);
   }
 }

@@ -36,12 +36,16 @@ class _AddMedViewState extends State<AddMedView> {
   TextEditingController textEditingControllerdose = TextEditingController();
   TextEditingController textEditingControllerAmount = TextEditingController();
   List<String> types = ['Capsule', 'Drop', 'Tablet'];
+  List<String> typesAr = ['كبسولة', 'نقط', 'قرص'];
   bool pressed = false;
   String type = 'Select Option';
+  String typeAr = 'أختار النوع';
   bool picked = false;
   DateTime? selectedDateTime;
   bool alarmSet = false;
   DateTime? selectedTime;
+  DateTime? repeatedEvery;
+  bool rebeat = false;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoadFromHiveCubit, LoadFromHiveState>(
@@ -50,7 +54,9 @@ class _AddMedViewState extends State<AddMedView> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Medicine Saved',
+                Localizations.localeOf(context).languageCode == 'ar'
+                    ? 'تم تخزين الدواء بنجاح'
+                    : 'Medicine Stored successfully',
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: ColorGuide.mainColor,
@@ -74,7 +80,6 @@ class _AddMedViewState extends State<AddMedView> {
         return ModalProgressHUD(
           inAsyncCall: state is LoadToHiveLoading,
           child: Scaffold(
-            backgroundColor: Colors.white,
             body: Stack(
               children: [
                 Padding(
@@ -86,13 +91,21 @@ class _AddMedViewState extends State<AddMedView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: ScreenSize.height * 0.08),
-                        CustomMainText(txt: 'Add New Medicine'),
+                        CustomMainText(
+                          txt:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'أضف دواء جديد'
+                              : 'Add New Medicine',
+                        ),
                         SizedBox(height: ScreenSize.height * 0.02),
                         Text(
                           textAlign: TextAlign.center,
-                          'Fill out the fields and hit the Save Button to add it!',
+                          Localizations.localeOf(context).languageCode == 'ar'
+                              ? 'املأ الحقول واضغط على زر الحفظ لإضافته!'
+                              : 'Fill out the fields and hit the Save Button to add it!',
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Theme.of(context).dividerColor,
                             fontWeight: FontWeight.w600,
                             fontSize: ScreenSize.height * 0.021,
                           ),
@@ -101,29 +114,71 @@ class _AddMedViewState extends State<AddMedView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomLabelText(txt: 'Name'),
+                            CustomLabelText(
+                              txt:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'الأسم'
+                                  : 'Name',
+                            ),
 
                             CustomInputField(
                               fieldKey: nameKey,
-                              hint: 'Enter medicin name',
-                              label: 'Name',
+                              hint:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أدخل اسم الدواء'
+                                  : 'Enter medicin name',
+                              label:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'الأسم'
+                                  : 'Name',
                               fieldController: textEditingControllerName,
                               isPassword: false,
                               textInputType: TextInputType.text,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'fill that field';
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'املأ هذا الحقل'
+                                      : 'fill that field';
                                 } else {
                                   return null;
                                 }
                               },
                             ),
 
-                            CustomLabelText(txt: 'Type'),
+                            CustomLabelText(
+                              txt:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'النوع'
+                                  : 'Type',
+                            ),
 
                             GestureDetector(
                               onTap: () {
-                                type == 'Select Option'
+                                (Localizations.localeOf(context).languageCode ==
+                                                'ar'
+                                            ? typeAr
+                                            : type) ==
+                                        (Localizations.localeOf(
+                                                  context,
+                                                ).languageCode ==
+                                                'ar'
+                                            ? 'أختار النوع'
+                                            : 'Select Option')
                                     ? pressed = !pressed
                                     : pressed = pressed;
                                 setState(() {});
@@ -143,22 +198,42 @@ class _AddMedViewState extends State<AddMedView> {
                                       ScreenSize.height * 0.02,
                                     ),
                                   ),
-                                  color: Colors.white,
+                                  color: Theme.of(
+                                    context,
+                                  ).scaffoldBackgroundColor,
                                   elevation: 10,
 
                                   items: List.generate(
                                     types.length,
                                     (index) => PopupMenuItem(
-                                      value: types[index],
+                                      value:
+                                          Localizations.localeOf(
+                                                context,
+                                              ).languageCode ==
+                                              'ar'
+                                          ? typesAr[index]
+                                          : types[index],
                                       onTap: () {
-                                        type = types[index];
-                                        setState(() {});
+                                        Localizations.localeOf(
+                                                  context,
+                                                ).languageCode ==
+                                                'ar'
+                                            ? typeAr = typesAr[index]
+                                            : type = types[index];
+                                        setState(() {
+                                          log(typeAr);
+                                        });
                                       },
                                       height: ScreenSize.height * 0.055,
                                       child: Text(
-                                        types[index],
+                                        Localizations.localeOf(
+                                                  context,
+                                                ).languageCode ==
+                                                'ar'
+                                            ? typesAr[index]
+                                            : types[index],
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Theme.of(context).hintColor,
                                           fontSize: ScreenSize.height * 0.025,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -174,41 +249,109 @@ class _AddMedViewState extends State<AddMedView> {
                               },
                               child: CustomSelectionContainer(
                                 mainColor: !pressed
-                                    ? type != 'Select Option'
-                                          ? ColorGuide.mainColor
-                                          : Colors.black
-                                    : ColorGuide.mainColor,
-                                txt: type,
+                                    ? (Localizations.localeOf(
+                                                        context,
+                                                      ).languageCode ==
+                                                      'ar'
+                                                  ? typeAr
+                                                  : type) !=
+                                              (Localizations.localeOf(
+                                                        context,
+                                                      ).languageCode ==
+                                                      'ar'
+                                                  ? 'أختار النوع'
+                                                  : 'Select Option')
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).hintColor
+                                    : Theme.of(context).primaryColor,
+                                txt:
+                                    Localizations.localeOf(
+                                          context,
+                                        ).languageCode ==
+                                        'ar'
+                                    ? typeAr
+                                    : type,
                                 iconData: Icons.keyboard_arrow_down_outlined,
                               ),
                             ),
-                            CustomLabelText(txt: 'Dose'),
+                            CustomLabelText(
+                              txt:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'الجرعة'
+                                  : 'Dose',
+                            ),
                             CustomInputField(
                               fieldKey: doseKey,
-                              hint: 'Enter medicin dose',
-                              label: 'Dose',
+
+                              hint:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أدخل جرعة الدواء'
+                                  : 'Enter medicin dose',
+                              label:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'الجرعة'
+                                  : 'Dose',
                               fieldController: textEditingControllerdose,
                               isPassword: false,
                               textInputType: TextInputType.text,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'fill that field';
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'املأ هذا الحقل'
+                                      : 'fill that field';
                                 } else {
                                   return null;
                                 }
                               },
                             ),
-                            CustomLabelText(txt: 'Amount'),
+                            CustomLabelText(
+                              txt:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'الكمية'
+                                  : 'Amount',
+                            ),
                             CustomInputField(
                               fieldKey: amountKey,
-                              hint: 'Enter medicin amount',
-                              label: 'Amount',
+                              hint:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أدخل كمية الدواء'
+                                  : 'Enter medicin amount',
+                              label:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'الكمية'
+                                  : 'Amount',
                               fieldController: textEditingControllerAmount,
                               isPassword: false,
                               textInputType: TextInputType.number,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'fill that field';
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'املأ هذا الحقل'
+                                      : 'fill that field';
                                 } else {
                                   return null;
                                 }
@@ -216,17 +359,23 @@ class _AddMedViewState extends State<AddMedView> {
                             ),
                             SizedBox(height: ScreenSize.height * 0.0185),
                             Text(
-                              'Reminders',
+                              Localizations.localeOf(context).languageCode ==
+                                      'ar'
+                                  ? 'تذكيرات'
+                                  : 'Reminders',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).hintColor,
                                 fontSize: ScreenSize.height * 0.025,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
                             Text(
-                              'Date',
+                              Localizations.localeOf(context).languageCode ==
+                                      'ar'
+                                  ? 'التاريخ'
+                                  : 'Date',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).hintColor,
                                 fontSize: ScreenSize.height * 0.02,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -235,12 +384,14 @@ class _AddMedViewState extends State<AddMedView> {
                             picked
                                 ? Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: Theme.of(
+                                        context,
+                                      ).secondaryHeaderColor,
                                       borderRadius: BorderRadius.circular(
                                         ScreenSize.height * 0.025,
                                       ),
                                       border: Border.all(
-                                        color: ColorGuide.mainColor,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
                                     child: Row(
@@ -253,7 +404,7 @@ class _AddMedViewState extends State<AddMedView> {
                                           ).format(selectedDateTime!),
                                           style: TextStyle(
                                             fontSize: ScreenSize.height * 0.02,
-                                            color: Colors.black,
+                                            color: Theme.of(context).hintColor,
                                           ),
                                         ),
                                         Text(
@@ -262,7 +413,7 @@ class _AddMedViewState extends State<AddMedView> {
                                           ).format(selectedDateTime!),
                                           style: TextStyle(
                                             fontSize: ScreenSize.height * 0.02,
-                                            color: Colors.black,
+                                            color: Theme.of(context).hintColor,
                                           ),
                                         ),
                                         Text(
@@ -271,7 +422,7 @@ class _AddMedViewState extends State<AddMedView> {
                                           ).format(selectedDateTime!),
                                           style: TextStyle(
                                             fontSize: ScreenSize.height * 0.02,
-                                            color: Colors.black,
+                                            color: Theme.of(context).hintColor,
                                           ),
                                         ),
                                         ElevatedButton(
@@ -279,14 +430,21 @@ class _AddMedViewState extends State<AddMedView> {
                                             showDatePicker(context);
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.amber,
+                                            backgroundColor: Theme.of(
+                                              context,
+                                            ).primaryColorDark,
                                             minimumSize: Size(
                                               ScreenSize.width * 0.02,
                                               ScreenSize.height * 0.015,
                                             ),
                                           ),
                                           child: Text(
-                                            'Edit',
+                                            Localizations.localeOf(
+                                                      context,
+                                                    ).languageCode ==
+                                                    'ar'
+                                                ? 'تعديل'
+                                                : 'Edit',
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
@@ -306,7 +464,7 @@ class _AddMedViewState extends State<AddMedView> {
                                       setState(() {});
                                     },
                                     child: CustomSelectionContainer(
-                                      mainColor: Colors.grey,
+                                      mainColor: Theme.of(context).dividerColor,
                                       txt: 'dd/mm/yyy , 00:00',
                                       iconData: Icons.calendar_month,
                                     ),
@@ -318,7 +476,7 @@ class _AddMedViewState extends State<AddMedView> {
                                 horizontal: ScreenSize.width * 0.05,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(133, 220, 220, 220),
+                                color: Theme.of(context).dividerColor,
                                 borderRadius: BorderRadius.circular(
                                   ScreenSize.height * 0.015,
                                 ),
@@ -328,7 +486,12 @@ class _AddMedViewState extends State<AddMedView> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Turn on Alarm',
+                                    Localizations.localeOf(
+                                              context,
+                                            ).languageCode ==
+                                            'ar'
+                                        ? 'وقت الجرعة الأولى في اليوم'
+                                        : 'Time of first dose in day',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: ScreenSize.height * 0.02,
@@ -356,6 +519,56 @@ class _AddMedViewState extends State<AddMedView> {
                                 ],
                               ),
                             ),
+                            SizedBox(height: ScreenSize.height * 0.0185),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: ScreenSize.height * 0.01,
+                                horizontal: ScreenSize.width * 0.05,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).dividerColor,
+                                borderRadius: BorderRadius.circular(
+                                  ScreenSize.height * 0.015,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    Localizations.localeOf(
+                                              context,
+                                            ).languageCode ==
+                                            'ar'
+                                        ? 'فترة التكرار'
+                                        : 'Repetition period',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: ScreenSize.height * 0.02,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Switch(
+                                    value: rebeat,
+                                    onChanged: (value) {
+                                      showTimeRebeatedSelector(context);
+                                    },
+
+                                    thumbColor: WidgetStatePropertyAll(
+                                      Colors.white,
+                                    ),
+                                    trackOutlineColor: WidgetStatePropertyAll(
+                                      Color.fromARGB(133, 220, 220, 220),
+                                    ),
+                                    trackColor: WidgetStatePropertyAll(
+                                      rebeat
+                                          ? Colors.green
+                                          : Color.fromARGB(133, 159, 158, 158),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(height: ScreenSize.height * 0.0185),
@@ -367,9 +580,14 @@ class _AddMedViewState extends State<AddMedView> {
                             if (nameKey.currentState!.validate() &&
                                 doseKey.currentState!.validate() &&
                                 amountKey.currentState!.validate()) {
-                              if (type != "Select Option" &&
-                                  selectedDateTime != null &&
-                                  selectedTime != null) {
+                              if (Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? typeAr != 'أختار النوع'
+                                  : type != "Select Option" &&
+                                        selectedDateTime != null &&
+                                        selectedTime != null) {
                                 BlocProvider.of<LoadFromHiveCubit>(
                                   context,
                                 ).storeInHive(
@@ -382,7 +600,13 @@ class _AddMedViewState extends State<AddMedView> {
                                     ),
                                     endAt: selectedDateTime!,
                                     alarmAt: DateFormat(
-                                      'hh:mm',
+                                      'HH:mm',
+                                    ).format(selectedTime!),
+                                    rebeatEvery: DateFormat(
+                                      'HH:mm',
+                                    ).format(repeatedEvery!),
+                                    nextDose: DateFormat(
+                                      'HH:mm',
                                     ).format(selectedTime!),
                                   ),
                                 );
@@ -390,7 +614,12 @@ class _AddMedViewState extends State<AddMedView> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      'Complete informations !',
+                                      Localizations.localeOf(
+                                                context,
+                                              ).languageCode ==
+                                              'ar'
+                                          ? 'أكمل المعلومات'
+                                          : 'Complete informations !',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     backgroundColor: Colors.red,
@@ -399,11 +628,16 @@ class _AddMedViewState extends State<AddMedView> {
                               }
                             }
                           },
-                          txt: 'Save',
+                          txt:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'حفظ'
+                              : 'Save',
                           active: true,
                           width: ScreenSize.width * 0.35,
                           height: ScreenSize.height * 0.05,
                         ),
+                        SizedBox(height: ScreenSize.height * 0.0485),
                       ],
                     ),
                   ),
@@ -457,14 +691,16 @@ class _AddMedViewState extends State<AddMedView> {
       builder: (context) => AlertDialog(
         actionsAlignment: MainAxisAlignment.spaceAround,
         title: Text(
-          'Set Time for Alarm',
+          Localizations.localeOf(context).languageCode == 'ar'
+              ? 'وقت الجرعة الأولى في اليوم'
+              : 'Time of first dose in day',
           style: TextStyle(
-            color: ColorGuide.mainColor,
+            color: Theme.of(context).primaryColor,
             fontSize: ScreenSize.height * 0.025,
             fontWeight: FontWeight.w500,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         content: SizedBox(
           height: ScreenSize.height * 0.3,
           width: ScreenSize.width * 0.75,
@@ -480,7 +716,9 @@ class _AddMedViewState extends State<AddMedView> {
             onTap: () {
               Navigator.of(context).maybePop();
             },
-            txt: 'Cancel',
+            txt: Localizations.localeOf(context).languageCode == 'ar'
+                ? 'الغاء'
+                : 'Cancel',
             active: false,
             width: ScreenSize.width * 0.055,
             height: ScreenSize.height * 0.055,
@@ -492,7 +730,67 @@ class _AddMedViewState extends State<AddMedView> {
               Navigator.of(context).maybePop();
               setState(() {});
             },
-            txt: 'Save',
+            txt: Localizations.localeOf(context).languageCode == 'ar'
+                ? 'حفظ'
+                : 'Save',
+            active: true,
+            width: ScreenSize.width * 0.055,
+            height: ScreenSize.height * 0.055,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showTimeRebeatedSelector(BuildContext context) {
+    repeatedEvery = DateTime(DateTime.now().year);
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => AlertDialog(
+        actionsAlignment: MainAxisAlignment.spaceAround,
+        title: Text(
+          Localizations.localeOf(context).languageCode == 'ar'
+              ? 'تحديد فترة التكرار'
+              : 'Set Rebeation Period',
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: ScreenSize.height * 0.025,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        content: SizedBox(
+          height: ScreenSize.height * 0.3,
+          width: ScreenSize.width * 0.75,
+          child: CustomDateTime(
+            onDateChange: (value) {
+              repeatedEvery = value;
+            },
+            cupertinoDatePickerMode: CupertinoDatePickerMode.time,
+          ),
+        ),
+        actions: [
+          CustomButton(
+            onTap: () {
+              Navigator.of(context).maybePop();
+            },
+            txt: Localizations.localeOf(context).languageCode == 'ar'
+                ? 'الغاء'
+                : 'Cancel',
+            active: false,
+            width: ScreenSize.width * 0.055,
+            height: ScreenSize.height * 0.055,
+          ),
+          CustomButton(
+            onTap: () {
+              log(repeatedEvery.toString());
+              rebeat = true;
+              Navigator.of(context).maybePop();
+              setState(() {});
+            },
+            txt: Localizations.localeOf(context).languageCode == 'ar'
+                ? 'حفظ'
+                : 'Save',
             active: true,
             width: ScreenSize.width * 0.055,
             height: ScreenSize.height * 0.055,

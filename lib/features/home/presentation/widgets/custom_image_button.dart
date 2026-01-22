@@ -8,9 +8,9 @@ class CustomImageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-     path ,
+      path,
       width: ScreenSize.width * 0.15,
-      height: ScreenSize.height * 0.07,
+      height: ScreenSize.height * 0.08,
       fit: BoxFit.contain,
     );
   }

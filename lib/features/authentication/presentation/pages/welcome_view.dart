@@ -15,7 +15,6 @@ class WelcomeView extends StatelessWidget {
     ScreenSize.init(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: ScreenSize.width * 0.0879),
         child: Column(
@@ -30,7 +29,7 @@ class WelcomeView extends StatelessWidget {
             Text(
               "Welcome To",
               style: TextStyle(
-                color: Color(0xffFF7551),
+                color: Theme.of(context).primaryColorDark,
                 fontSize: ScreenSize.height * 0.0439914163090129,
                 fontWeight: FontWeight.bold,
               ),
@@ -38,7 +37,7 @@ class WelcomeView extends StatelessWidget {
             Text(
               "MediMinder",
               style: TextStyle(
-                color: ColorGuide.mainColor,
+                color: Theme.of(context).primaryColor,
                 fontSize: ScreenSize.height * 0.0555,
                 fontWeight: FontWeight.bold,
               ),
@@ -47,7 +46,7 @@ class WelcomeView extends StatelessWidget {
               'Your personal assistant for managing your medication schedule.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: ColorGuide.mainColor,
+                color: Theme.of(context).primaryColor,
                 fontSize: ScreenSize.height * 0.01917,
                 fontWeight: FontWeight.w500,
               ),

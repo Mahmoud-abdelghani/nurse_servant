@@ -72,7 +72,6 @@ class _OtpViewState extends State<OtpView> {
             return ModalProgressHUD(
               inAsyncCall: state is LoginLoading,
               child: Scaffold(
-                backgroundColor: Colors.white,
                 body: Stack(
                   children: [
                     Padding(
@@ -103,7 +102,7 @@ class _OtpViewState extends State<OtpView> {
                           Text(
                             'We have sent you an email verification',
                             style: TextStyle(
-                              color: Colors.grey,
+                              color: Theme.of(context).dividerColor,
                               fontSize: ScreenSize.height * 0.017,
                               fontWeight: FontWeight.w600,
                             ),
@@ -137,8 +136,8 @@ class _OtpViewState extends State<OtpView> {
                               Text(
                                 "Didn’t received code?",
                                 style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: ScreenSize.height * 0.015,
+                                  color: Theme.of(context).hintColor,
+                                  fontSize: ScreenSize.height * 0.017,
                                 ),
                               ),
                               TextButton(
@@ -146,8 +145,8 @@ class _OtpViewState extends State<OtpView> {
                                 child: Text(
                                   'Resend',
                                   style: TextStyle(
-                                    color: ColorGuide.mainColor,
-                                    fontSize: ScreenSize.height * 0.015,
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: ScreenSize.height * 0.017,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

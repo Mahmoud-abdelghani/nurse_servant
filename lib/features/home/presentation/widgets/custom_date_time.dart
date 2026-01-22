@@ -11,21 +11,33 @@ class CustomDateTime extends StatelessWidget {
   final CupertinoDatePickerMode cupertinoDatePickerMode;
   @override
   Widget build(BuildContext context) {
-    return CupertinoDatePicker(
-      selectionOverlayBuilder:
-          (context, {required columnCount, required selectedIndex}) =>
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.symmetric(
-                    horizontal: BorderSide(color: Colors.grey),
+    return CupertinoTheme(
+      data: CupertinoThemeData(
+        textTheme: CupertinoTextThemeData(
+          dateTimePickerTextStyle: TextStyle(
+            color: Theme.of(context).hintColor,
+            fontSize: 18,
+          ),
+        ),
+      ),
+      child: CupertinoDatePicker(
+        selectionOverlayBuilder:
+            (context, {required columnCount, required selectedIndex}) =>
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.symmetric(
+                      horizontal: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-      onDateTimeChanged: onDateChange,
-      backgroundColor: Colors.white,
-      initialDateTime: DateTime.now(),
-      mode: cupertinoDatePickerMode,
-      use24hFormat: true,
+        onDateTimeChanged: onDateChange,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        initialDateTime: DateTime.now(),
+        mode: cupertinoDatePickerMode,
+        use24hFormat: true,
+      ),
     );
   }
 }

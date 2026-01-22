@@ -55,6 +55,7 @@ class _LoginViewState extends State<LoginView> {
               context,
             ).storeInHive(MedicineModel.fromJson(item));
           }
+
           BlocProvider.of<LoadFromHiveCubit>(context).getDataFromHive();
 
           Navigator.pushReplacementNamed(context, HomeView.routeName);
@@ -67,7 +68,9 @@ class _LoginViewState extends State<LoginView> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Wellcome to Nurse Servant',
+                    Localizations.localeOf(context).languageCode == 'ar'
+                        ? 'مرحبًا بك في Nurse Servant'
+                        : 'Welcome to Nurse Servant',
                     style: TextStyle(color: Colors.white),
                   ),
                   backgroundColor: ColorGuide.mainColor,
@@ -105,7 +108,6 @@ class _LoginViewState extends State<LoginView> {
                   state is LoginLoading ||
                   state is CreatingNewUserLoading,
               child: Scaffold(
-                backgroundColor: Colors.white,
                 body: Stack(
                   children: [
                     Padding(
@@ -133,21 +135,50 @@ class _LoginViewState extends State<LoginView> {
                           children: [
                             SizedBox(height: ScreenSize.height * 0.0890557 * 2),
                             CustomMainText(
-                              txt: 'Welcome back! Glad to see you, Again!',
+                              txt:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'مرحبًا بعودتك! سعداء برؤيتك مرة أخرى'
+                                  : 'Welcome back! Glad to see you, Again!',
                             ),
+
                             SizedBox(height: ScreenSize.height * 0.016094 * 2),
                             CustomInputField(
                               fieldKey: emailKey,
-                              hint: "Enter your email",
-                              label: 'Email',
+                              hint:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أدخل بريدك الإلكتروني'
+                                  : 'Enter your email',
+                              label:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'البريد الإلكتروني'
+                                  : 'Email',
                               fieldController: textEditingControllerEmail,
                               isPassword: false,
                               textInputType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'This field is required';
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'هذا الحقل مطلوب'
+                                      : 'This field is required';
                                 } else if (!value.contains('@')) {
-                                  return "Enter a valid email";
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'أدخل بريدًا إلكترونيًا صحيحًا'
+                                      : 'Enter a valid email';
                                 } else {
                                   return null;
                                 }
@@ -156,8 +187,21 @@ class _LoginViewState extends State<LoginView> {
                             SizedBox(height: ScreenSize.height * 0.016094),
                             CustomInputField(
                               fieldKey: passwordKey,
-                              hint: "Enter your password",
-                              label: 'password',
+                              hint:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أدخل كلمة المرور'
+                                  : 'Enter your password',
+                              label:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'كلمة المرور'
+                                  : 'Password',
+
                               fieldController: textEditingControllerPassword,
                               isPassword: true,
                               textInputType: TextInputType.text,
@@ -169,7 +213,12 @@ class _LoginViewState extends State<LoginView> {
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'This field is required';
+                                  return Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'هذا الحقل مطلوب'
+                                      : 'This field is required';
                                 } else {
                                   return null;
                                 }
@@ -183,9 +232,12 @@ class _LoginViewState extends State<LoginView> {
                                 ).pushNamed(ForgotPasswordView.routeName);
                               },
                               child: Text(
-                                'Forgot Password?',
+                                Localizations.localeOf(context).languageCode ==
+                                        'ar'
+                                    ? 'هل نسيت كلمة المرور؟'
+                                    : 'Forgot Password?',
                                 style: TextStyle(
-                                  color: ColorGuide.mainColor,
+                                  color: Theme.of(context).primaryColor,
                                   fontSize: ScreenSize.height * 0.02,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -200,7 +252,13 @@ class _LoginViewState extends State<LoginView> {
                                   password: textEditingControllerPassword.text,
                                 );
                               },
-                              txt: "Login",
+                              txt:
+                                  Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'تسجيل الدخول'
+                                  : 'Login',
                               active: true,
                               width: ScreenSize.width,
                               height: ScreenSize.height * 0.068,
@@ -220,12 +278,18 @@ class _LoginViewState extends State<LoginView> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
-                                  "Don’t have an account?",
+                                  Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'ليس لديك حساب؟'
+                                      : 'Don’t have an account?',
                                   style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: ScreenSize.height * 0.015,
+                                    color: Theme.of(context).hintColor,
+                                    fontSize: ScreenSize.height * 0.017,
                                   ),
                                 ),
+
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(
@@ -233,10 +297,15 @@ class _LoginViewState extends State<LoginView> {
                                     ).pushNamed(RegisterView.routeName);
                                   },
                                   child: Text(
-                                    'Register',
+                                    Localizations.localeOf(
+                                              context,
+                                            ).languageCode ==
+                                            'ar'
+                                        ? 'إنشاء حساب'
+                                        : 'Register',
                                     style: TextStyle(
-                                      color: ColorGuide.mainColor,
-                                      fontSize: ScreenSize.height * 0.015,
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: ScreenSize.height * 0.017,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

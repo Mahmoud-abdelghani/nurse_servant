@@ -48,7 +48,6 @@ class ForgotPasswordView extends StatelessWidget {
         return ModalProgressHUD(
           inAsyncCall: state is PasswordResetConfirmLoading,
           child: Scaffold(
-            backgroundColor: Colors.white,
             body: Stack(
               children: [
                 Padding(
@@ -80,7 +79,7 @@ class ForgotPasswordView extends StatelessWidget {
                         Text(
                           'Don\'t worry! It occurs. Please enter the email address linked with your account.',
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Theme.of(context).dividerColor,
                             fontSize: ScreenSize.height * 0.017,
                             fontWeight: FontWeight.w600,
                           ),
@@ -128,7 +127,7 @@ class ForgotPasswordView extends StatelessWidget {
                             Text(
                               "Remember Password?",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).hintColor,
                                 fontSize: ScreenSize.height * 0.02,
                               ),
                             ),
@@ -141,7 +140,7 @@ class ForgotPasswordView extends StatelessWidget {
                               child: Text(
                                 'Login',
                                 style: TextStyle(
-                                  color: ColorGuide.mainColor,
+                                  color: Theme.of(context).primaryColor,
                                   fontSize: ScreenSize.height * 0.02,
                                   fontWeight: FontWeight.bold,
                                 ),

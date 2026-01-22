@@ -20,7 +20,7 @@ class CustomSelectionContainer extends StatelessWidget {
         vertical: ScreenSize.height * 0.019,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).secondaryHeaderColor,
         border: Border.all(color: mainColor),
         borderRadius: BorderRadius.circular(ScreenSize.height * 0.015),
       ),
@@ -29,6 +29,7 @@ class CustomSelectionContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
+            
             txt,
             style: TextStyle(
               color: mainColor,
