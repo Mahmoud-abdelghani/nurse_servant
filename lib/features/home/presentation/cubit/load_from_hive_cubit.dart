@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -20,30 +19,64 @@ class LoadFromHiveCubit extends Cubit<LoadFromHiveState> {
     }
   }
 
-  void getDataFromHive() {
+  Future<void> getDataFromHive() async {
     try {
       emit(LoadFromHiveLoading());
+      log('prepare data : ');
       List<MedicineModel> medicines = HiveService.getMedicineStoredInAList();
+      log(medicines.length.toString());
+      List<MedicineModel> upToDateMedicine = [];
+      log(upToDateMedicine.length.toString());
       try {
         if (medicines.isNotEmpty) {
-          medicines.sort(
+          for (var element in medicines) {
+            if (element.endAt.isAfter(DateTime.now())) {
+              upToDateMedicine.add(element);
+            }
+          }
+          if (upToDateMedicine.length > medicines.length) {
+            upToDateMedicine.removeLast();
+          }
+          log(upToDateMedicine.length.toString());
+          log('elmoktaaaaar');
+          log(upToDateMedicine.length.toString());
+          for (var element in upToDateMedicine) {
+            if (int.parse(element.nextDose.split(':').first) <
+                DateTime.now().hour) {
+              while (int.parse(element.nextDose.split(':').first) <
+                  DateTime.now().hour) {
+                element.nextDose =
+                    '${int.parse(element.nextDose.split(':').first) + int.parse(element.rebeatEvery.split(':').first)}:${element.nextDose.split(':').last}';
+              }
+              if (int.parse(element.nextDose.split(':').first) >= 24) {
+                if (int.parse(element.nextDose.split(':').first) - 24 <= 2) {
+                  element.nextDose =
+                      '${int.parse(element.nextDose.split(':').first) - 24}:${element.nextDose.split(':').last}';
+                } else {
+                  element.nextDose = element.alarmAt;
+                }
+              }
+            }
+          }
+
+          upToDateMedicine.sort(
             (a, b) =>
-                (int.parse(a.alarmAt.split(':').first) - DateTime.now().hour)
+                (int.parse(a.nextDose.split(':').first) - DateTime.now().hour)
                     .isNegative
                 ? 100 *
-                      -(int.parse(a.alarmAt.split(':').first) -
+                      -(int.parse(a.nextDose.split(':').first) -
                           DateTime.now().hour)
-                : (int.parse(a.alarmAt.split(':').first) - DateTime.now().hour)
+                : (int.parse(a.nextDose.split(':').first) - DateTime.now().hour)
                       .compareTo(
-                        (int.parse(b.alarmAt.split(':').first).toInt() -
+                        (int.parse(b.nextDose.split(':').first).toInt() -
                                     DateTime.now().hour)
                                 .isNegative
                             ? 100 *
                                   -(int.parse(
-                                        b.alarmAt.split(':').first,
+                                        b.nextDose.split(':').first,
                                       ).toInt() -
                                       DateTime.now().hour)
-                            : (int.parse(b.alarmAt.split(':').first).toInt() -
+                            : (int.parse(b.nextDose.split(':').first).toInt() -
                                   DateTime.now().hour),
                       ),
           );
@@ -51,9 +84,9 @@ class LoadFromHiveCubit extends Cubit<LoadFromHiveState> {
       } on Exception catch (e) {
         emit(LoadFromHiveError(message: e.toString()));
       }
-      medicines.isEmpty
+      upToDateMedicine.isEmpty
           ? emit(LoadFromHiveSuccessButEmpty())
-          : emit(LoadFromHiveSuccess(mediciens: medicines));
+          : emit(LoadFromHiveSuccess(mediciens: upToDateMedicine));
     } on Exception catch (e) {
       emit(LoadFromHiveError(message: e.toString()));
     }

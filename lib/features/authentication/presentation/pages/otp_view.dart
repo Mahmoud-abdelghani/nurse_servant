@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -21,64 +23,57 @@ class OtpView extends StatefulWidget {
 }
 
 class _OtpViewState extends State<OtpView> {
+  bool firstTime = true;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DataHandlingCubit, DataHandlingState>(
       listener: (context, state) {
         if (state is CreatingNewUserError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                state.message,
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.red,
-            ),
-          );
+          // log('Aha10                                     ');
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(
+          //       state.message,
+          //       style: TextStyle(color: Colors.white),
+          //     ),
+          //     backgroundColor: Colors.red,
+          //   ),
+          // );
         } else if (state is CreatingNewUserSuccess) {
-          Navigator.pushReplacementNamed(context, HomeView.routeName);
+          // Navigator.pushReplacementNamed(context, HomeView.routeName);
         }
       },
       builder: (context, state) {
         return BlocConsumer<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    "nursing app at your sevice",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: ColorGuide.mainColor,
-                ),
-              );
-              BlocProvider.of<DataHandlingCubit>(context).creatNewUserOrFetch(
-                SupabaseService.supabase.auth.currentUser!.email!,
-              );
-              BlocProvider.of<LoadFromHiveCubit>(context).getDataFromHive();
-            } else if (state is LoginFail) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    state.message,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            }
+              // log('Aha1                                       ');
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       "nursing app at your sevice",
+              //       style: TextStyle(color: Colors.white),
+              //     ),
+              //     backgroundColor: ColorGuide.mainColor,
+              //   ),
+              // );
+              // BlocProvider.of<DataHandlingCubit>(context).creatNewUserOrFetch(
+              //   SupabaseService.supabase.auth.currentUser!.email!,
+              // );
+              // BlocProvider.of<LoadFromHiveCubit>(context).getDataFromHive();
+            } else if (state is LoginFail) {}
           },
           builder: (context, state) {
             return ModalProgressHUD(
               inAsyncCall: state is LoginLoading,
               child: Scaffold(
-                backgroundColor: Colors.white,
                 body: Stack(
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
                         top: ScreenSize.height * 0.071888,
                         left: ScreenSize.width * 0.06046,
+                        right: ScreenSize.width * 0.06046,
                       ),
                       child: GestureDetector(
                         onTap: () => Navigator.maybePop(context),
@@ -98,12 +93,21 @@ class _OtpViewState extends State<OtpView> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Spacer(flex: 4),
-                          CustomMainText(txt: 'Verification'),
+                          CustomMainText(
+                            txt:
+                                Localizations.localeOf(context).languageCode ==
+                                    'ar'
+                                ? 'تأكيد الحساب'
+                                : 'Verification',
+                          ),
+
                           Spacer(flex: 1),
                           Text(
-                            'We have sent you an email verification',
+                            Localizations.localeOf(context).languageCode == 'ar'
+                                ? 'لقد أرسلنا لك رسالة تأكيد على البريد الإلكتروني'
+                                : 'We have sent you an email verification',
                             style: TextStyle(
-                              color: Colors.grey,
+                              color: Theme.of(context).dividerColor,
                               fontSize: ScreenSize.height * 0.017,
                               fontWeight: FontWeight.w600,
                             ),
@@ -112,8 +116,9 @@ class _OtpViewState extends State<OtpView> {
                           Spacer(flex: 4),
 
                           CustomButton(
-                            onTap: () {
-                              BlocProvider.of<AuthenticationCubit>(
+                            onTap: () async {
+                              log('button');
+                              await BlocProvider.of<AuthenticationCubit>(
                                 context,
                               ).login(
                                 email: context
@@ -124,7 +129,11 @@ class _OtpViewState extends State<OtpView> {
                                     .gPassword,
                               );
                             },
-                            txt: "Verify",
+                            txt:
+                                Localizations.localeOf(context).languageCode ==
+                                    'ar'
+                                ? 'تأكيد'
+                                : 'Verify',
                             active: true,
                             width: ScreenSize.width,
                             height: ScreenSize.height * 0.068,
@@ -135,19 +144,28 @@ class _OtpViewState extends State<OtpView> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
-                                "Didn’t received code?",
+                                Localizations.localeOf(context).languageCode ==
+                                        'ar'
+                                    ? 'لم يصلك الكود؟'
+                                    : 'Didn’t received code?',
                                 style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: ScreenSize.height * 0.015,
+                                  color: Theme.of(context).hintColor,
+                                  fontSize: ScreenSize.height * 0.017,
                                 ),
                               ),
+
                               TextButton(
                                 onPressed: () {},
                                 child: Text(
-                                  'Resend',
+                                  Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'إعادة الإرسال'
+                                      : 'Resend',
                                   style: TextStyle(
-                                    color: ColorGuide.mainColor,
-                                    fontSize: ScreenSize.height * 0.015,
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: ScreenSize.height * 0.017,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

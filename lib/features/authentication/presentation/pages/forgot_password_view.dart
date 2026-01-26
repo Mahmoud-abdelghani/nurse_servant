@@ -25,9 +25,12 @@ class ForgotPasswordView extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                "Don't worry almost there",
+                Localizations.localeOf(context).languageCode == 'ar'
+                    ? 'لا تقلق، أوشكت على الانتهاء'
+                    : "Don't worry, almost there",
                 style: TextStyle(color: Colors.white),
               ),
+
               backgroundColor: ColorGuide.mainColor,
             ),
           );
@@ -48,13 +51,13 @@ class ForgotPasswordView extends StatelessWidget {
         return ModalProgressHUD(
           inAsyncCall: state is PasswordResetConfirmLoading,
           child: Scaffold(
-            backgroundColor: Colors.white,
             body: Stack(
               children: [
                 Padding(
                   padding: EdgeInsets.only(
                     top: ScreenSize.height * 0.071888,
                     left: ScreenSize.width * 0.06046,
+                    right: ScreenSize.width * 0.06046,
                   ),
                   child: GestureDetector(
                     onTap: () => Navigator.maybePop(context),
@@ -75,47 +78,77 @@ class ForgotPasswordView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         SizedBox(height: ScreenSize.height * 0.0890557 * 2.5),
-                        CustomMainText(txt: 'Forgot Password?'),
+                        CustomMainText(
+                          txt:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'هل نسيت كلمة المرور؟'
+                              : 'Forgot Password?',
+                        ),
+
                         SizedBox(height: ScreenSize.height * 0.016094 * 2),
                         Text(
-                          'Don\'t worry! It occurs. Please enter the email address linked with your account.',
+                          Localizations.localeOf(context).languageCode == 'ar'
+                              ? 'لا تقلق، يحدث ذلك. من فضلك أدخل البريد الإلكتروني المرتبط بحسابك.'
+                              : 'Don\'t worry! It occurs. Please enter the email address linked with your account.',
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Theme.of(context).dividerColor,
                             fontSize: ScreenSize.height * 0.017,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+
                         SizedBox(height: ScreenSize.height * 0.016094 * 2),
                         CustomInputField(
                           fieldKey: emailKey,
-                          hint: "Enter your email",
-                          label: 'Email',
+                          hint:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'أدخل البريد الإلكتروني'
+                              : 'Enter your email',
+                          label:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'البريد الإلكتروني'
+                              : 'Email',
                           fieldController: textEditingController,
                           isPassword: false,
                           textInputType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'This field is required';
+                              return Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'هذا الحقل مطلوب'
+                                  : 'This field is required';
                             } else if (!value.contains('@')) {
-                              return "Enter a valid email";
-                            } else {
-                              return null;
+                              return Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أدخل بريدًا إلكترونيًا صحيحًا'
+                                  : 'Enter a valid email';
                             }
                           },
                         ),
                         SizedBox(height: ScreenSize.height * 0.046094),
 
                         CustomButton(
-                          onTap: () {
+                          onTap: () async {
                             if (emailKey.currentState!.validate()) {
-                              BlocProvider.of<AuthenticationCubit>(
+                              await BlocProvider.of<AuthenticationCubit>(
                                 context,
                               ).confirmEmailToChangePassword(
                                 email: textEditingController.text,
                               );
                             }
                           },
-                          txt: "Send Confirm",
+                          txt:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'إرسال'
+                              : 'Send Confirm',
                           active: true,
                           width: ScreenSize.width,
                           height: ScreenSize.height * 0.068,
@@ -126,12 +159,16 @@ class ForgotPasswordView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                              "Remember Password?",
+                              Localizations.localeOf(context).languageCode ==
+                                      'ar'
+                                  ? 'تذكرت كلمة المرور؟'
+                                  : 'Remember Password?',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).hintColor,
                                 fontSize: ScreenSize.height * 0.02,
                               ),
                             ),
+
                             TextButton(
                               onPressed: () {
                                 Navigator.of(
@@ -139,9 +176,12 @@ class ForgotPasswordView extends StatelessWidget {
                                 ).pushNamed(LoginView.routeName);
                               },
                               child: Text(
-                                'Login',
+                                Localizations.localeOf(context).languageCode ==
+                                        'ar'
+                                    ? 'تسجيل الدخول'
+                                    : 'Login',
                                 style: TextStyle(
-                                  color: ColorGuide.mainColor,
+                                  color: Theme.of(context).primaryColor,
                                   fontSize: ScreenSize.height * 0.02,
                                   fontWeight: FontWeight.bold,
                                 ),

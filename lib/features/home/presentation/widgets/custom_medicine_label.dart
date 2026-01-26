@@ -10,35 +10,34 @@ class CustomMedicineLabel extends StatelessWidget {
     required this.amount,
     required this.type,
     required this.dose,
-    required this.alarmAt,
+    required this.nextDose,
   });
   final String title;
   final int amount;
   final String type;
   final String dose;
-  final String alarmAt;
+  final String nextDose;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      // shape: RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.circular(ScreenSize.height * 0.015),
-      //   side: BorderSide(color: Colors.grey),
-      // ),
       title: Text(
         title,
         style: TextStyle(
-          color: Colors.black,
+          color: Theme.of(context).hintColor,
           fontSize: ScreenSize.height * 0.025,
           fontWeight: FontWeight.bold,
         ),
       ),
       leading: Icon(
         Icons.info,
-        color: Colors.amber,
+        color: Theme.of(context).primaryColorLight,
         size: ScreenSize.height * 0.035,
       ),
-      subtitle: Text('$amount $type, $dose'),
+      subtitle: Text(
+        '$amount $type, $dose',
+        style: TextStyle(color: Theme.of(context).dividerColor),
+      ),
       trailing: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -49,13 +48,13 @@ class CustomMedicineLabel extends StatelessWidget {
               spreadRadius: 1,
             ),
           ],
-          color: ColorGuide.mainColor,
+          color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(ScreenSize.height * 0.01),
         ),
         padding: EdgeInsets.all(5),
 
         child: Text(
-          alarmAt,
+          nextDose,
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

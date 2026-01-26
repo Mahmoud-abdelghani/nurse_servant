@@ -11,7 +11,7 @@ class CustomLabelText extends StatelessWidget {
       child: Text(
         '$txt*',
         style: TextStyle(
-          color: Colors.black,
+          color: Theme.of(context).hintColor,
           fontSize: ScreenSize.height * 0.02,
           fontWeight: FontWeight.w400,
         ),

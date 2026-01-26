@@ -21,7 +21,7 @@ class CustomDatailsRow extends StatelessWidget {
         Icon(
           iconData,
           color: ColorGuide.mainColor,
-          size: ScreenSize.height * 0.035,
+          size: ScreenSize.height * 0.03,
           weight: 10,
         ),
         Text(
@@ -29,7 +29,7 @@ class CustomDatailsRow extends StatelessWidget {
           style: TextStyle(
             color: ColorGuide.mainColor,
             fontWeight: FontWeight.w400,
-            fontSize: ScreenSize.height * 0.022,
+            fontSize: ScreenSize.height * 0.017,
           ),
         ),
       ],

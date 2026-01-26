@@ -23,6 +23,7 @@ import 'package:nurse_servant/features/home/presentation/widgets/custom_image_bu
 import 'package:nurse_servant/features/home/presentation/widgets/custom_medicine_label.dart';
 import 'package:nurse_servant/features/home/presentation/widgets/custom_next_amount.dart';
 import 'package:nurse_servant/features/home/presentation/widgets/custom_no_medicine.dart';
+import 'package:nurse_servant/features/settings/presentation/pages/settings_screen.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -32,14 +33,20 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  bool firstTime = true;
+  bool firstLog = true;
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is LogoutSuccess) {
-          HiveService.clearBox();
-          Navigator.of(context).pushReplacementNamed(LoginView.routeName);
+          if (firstTime) {
+            firstTime = false;
+            log('Logout 2  ');
+            HiveService.clearBox();
+            Navigator.of(context).pushReplacementNamed(LoginView.routeName);
+          }
         } else if (state is LogoutFail) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -54,9 +61,13 @@ class _HomeViewState extends State<HomeView> {
       },
       builder: (context, state) {
         return BlocConsumer<DataHandlingCubit, DataHandlingState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is SyncUserSuccess) {
-              BlocProvider.of<AuthenticationCubit>(context).logout();
+              if (firstLog) {
+                log('sync 1');
+                firstLog = false;
+                await BlocProvider.of<AuthenticationCubit>(context).logout();
+              }
             } else if (state is SyncUserError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -76,7 +87,6 @@ class _HomeViewState extends State<HomeView> {
                 builder: (context, state) {
                   if (state is LoadFromHiveError) {
                     return Scaffold(
-                      backgroundColor: Colors.white,
                       body: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: ScreenSize.width * 0.0579,
@@ -92,14 +102,18 @@ class _HomeViewState extends State<HomeView> {
                                       context,
                                     ).logout();
                                   },
-                                  child: CustomImageButton(
-                                    path: 'assets/Left Icon.png',
+                                  child: Image.asset(
+                                    'assets/farma.png',
+                                    width: ScreenSize.width * 0.15,
+                                    height: ScreenSize.height * 0.08,
+                                    fit: BoxFit.contain,
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                 ),
                                 Spacer(),
-                                CustomImageButton(path: 'assets/6735312.jpg'),
+                                CustomImageButton(path: 'assets/smile.png'),
                                 CustomImageButton(
-                                  path: 'assets/Right Icon.png',
+                                  path: 'assets/icon-1024x1024.png',
                                 ),
                               ],
                             ),
@@ -113,7 +127,6 @@ class _HomeViewState extends State<HomeView> {
                     );
                   } else if (state is LoadFromHiveLoading) {
                     return Scaffold(
-                      backgroundColor: Colors.white,
                       body: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: ScreenSize.width * 0.0579,
@@ -123,11 +136,17 @@ class _HomeViewState extends State<HomeView> {
                             Spacer(flex: 2),
                             Row(
                               children: [
-                                CustomImageButton(path: 'assets/Left Icon.png'),
+                                Image.asset(
+                                  'assets/farma.png',
+                                  width: ScreenSize.width * 0.15,
+                                  height: ScreenSize.height * 0.08,
+                                  fit: BoxFit.contain,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                                 Spacer(),
-                                CustomImageButton(path: 'assets/6735312.jpg'),
+                                CustomImageButton(path: 'assets/smile.png'),
                                 CustomImageButton(
-                                  path: 'assets/Right Icon.png',
+                                  path: 'assets/icon-1024x1024.png',
                                 ),
                               ],
                             ),
@@ -141,7 +160,6 @@ class _HomeViewState extends State<HomeView> {
                     );
                   } else if (state is LoadFromHiveSuccessButEmpty) {
                     return Scaffold(
-                      backgroundColor: Colors.white,
                       body: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: ScreenSize.width * 0.0579,
@@ -149,17 +167,34 @@ class _HomeViewState extends State<HomeView> {
                         child: Column(
                           children: [
                             Spacer(flex: 2),
-                            Row(
-                              children: [
-                                CustomImageButton(path: 'assets/Left Icon.png'),
-                                Spacer(),
-                                CustomImageButton(path: 'assets/6735312.jpg'),
-                                CustomImageButton(
-                                  path: 'assets/Right Icon.png',
-                                ),
-                              ],
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/farma.png',
+                                    width: ScreenSize.width * 0.15,
+                                    height: ScreenSize.height * 0.08,
+                                    fit: BoxFit.contain,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  Spacer(),
+                                  CustomImageButton(path: 'assets/smile.png'),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(
+                                        SettingsScreen.routeName,
+                                        arguments: [],
+                                      );
+                                    },
+                                    child: CustomImageButton(
+                                      path: 'assets/icon-1024x1024.png',
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Divider(),
+                            Divider(color: Theme.of(context).dividerColor),
                             Spacer(flex: 1),
                             CustomNoMedicine(),
                             Spacer(flex: 1),
@@ -173,10 +208,13 @@ class _HomeViewState extends State<HomeView> {
                         onPressed: () {
                           Navigator.pushNamed(context, AddMedView.routeName);
                         },
-                        backgroundColor: ColorGuide.mainColor,
-                        child: Icon(Icons.add, color: Colors.white),
+                        backgroundColor: Theme.of(context).primaryColor,
+                        child: Icon(
+                          Icons.add,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
                       ),
-                      backgroundColor: Colors.white,
+
                       body: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: ScreenSize.width * 0.0579,
@@ -186,20 +224,25 @@ class _HomeViewState extends State<HomeView> {
                             SizedBox(height: ScreenSize.height * 0.055),
                             Row(
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    BlocProvider.of<DataHandlingCubit>(
-                                      context,
-                                    ).syncAccount(state.mediciens);
-                                  },
-                                  child: CustomImageButton(
-                                    path: 'assets/Left Icon.png',
-                                  ),
+                                Image.asset(
+                                  'assets/farma.png',
+                                  width: ScreenSize.width * 0.15,
+                                  height: ScreenSize.height * 0.08,
+                                  fit: BoxFit.contain,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 Spacer(),
-                                CustomImageButton(path: 'assets/6735312.jpg'),
-                                CustomImageButton(
-                                  path: 'assets/Right Icon.png',
+                                CustomImageButton(path: 'assets/smile.png'),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                      SettingsScreen.routeName,
+                                      arguments: state.mediciens,
+                                    );
+                                  },
+                                  child: CustomImageButton(
+                                    path: 'assets/icon-1024x1024.png',
+                                  ),
                                 ),
                               ],
                             ),
@@ -223,7 +266,9 @@ class _HomeViewState extends State<HomeView> {
                                     void Function() onTap,
                                   ) => Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: Theme.of(
+                                        context,
+                                      ).scaffoldBackgroundColor,
                                       borderRadius: BorderRadius.circular(
                                         ScreenSize.height * .02,
                                       ),
@@ -232,13 +277,8 @@ class _HomeViewState extends State<HomeView> {
                                             ? ScreenSize.height * 0.0019
                                             : ScreenSize.height * 0.0012,
                                         color: isSelected
-                                            ? ColorGuide.mainColor
-                                            : const Color.fromARGB(
-                                                87,
-                                                158,
-                                                158,
-                                                158,
-                                              ),
+                                            ? Theme.of(context).primaryColor
+                                            : Theme.of(context).dividerColor,
                                       ),
                                     ),
                                     child: Column(
@@ -248,7 +288,7 @@ class _HomeViewState extends State<HomeView> {
                                         Text(
                                           date.day.toString(),
                                           style: TextStyle(
-                                            color: Colors.black,
+                                            color: Theme.of(context).hintColor,
                                             fontWeight: FontWeight.bold,
                                             fontSize: ScreenSize.height * 0.023,
                                           ),
@@ -257,13 +297,10 @@ class _HomeViewState extends State<HomeView> {
                                           DateFormat('EEE').format(date),
                                           style: TextStyle(
                                             color: isToday
-                                                ? ColorGuide.mainColor
-                                                : const Color.fromARGB(
-                                                    158,
-                                                    158,
-                                                    158,
-                                                    158,
-                                                  ),
+                                                ? Theme.of(context).primaryColor
+                                                : Theme.of(
+                                                    context,
+                                                  ).dividerColor,
                                             fontWeight: FontWeight.w500,
                                             fontSize: ScreenSize.height * 0.02,
                                           ),
@@ -276,9 +313,12 @@ class _HomeViewState extends State<HomeView> {
                             SizedBox(height: ScreenSize.height * 0.01),
 
                             Text(
-                              'Intakes',
+                              Localizations.localeOf(context).languageCode ==
+                                      'ar'
+                                  ? 'الجرعه القادمة'
+                                  : 'Next Dose',
                               style: TextStyle(
-                                color: ColorGuide.mainColor,
+                                color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: ScreenSize.height * 0.035,
                               ),
@@ -310,7 +350,8 @@ class _HomeViewState extends State<HomeView> {
                                         amount: state.mediciens[index].amount,
                                         type: state.mediciens[index].type,
                                         dose: state.mediciens[index].dose,
-                                        alarmAt: state.mediciens[index].alarmAt,
+                                        nextDose:
+                                            state.mediciens[index].nextDose,
                                       ),
                                     ),
                                 separatorBuilder: (context, index) =>
@@ -323,7 +364,6 @@ class _HomeViewState extends State<HomeView> {
                     );
                   } else {
                     return Scaffold(
-                      backgroundColor: Colors.white,
                       body: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: ScreenSize.width * 0.0579,
@@ -339,14 +379,18 @@ class _HomeViewState extends State<HomeView> {
                                       context,
                                     ).logout();
                                   },
-                                  child: CustomImageButton(
-                                    path: 'assets/Left Icon.png',
+                                  child: Image.asset(
+                                    'assets/farma.png',
+                                    width: ScreenSize.width * 0.15,
+                                    height: ScreenSize.height * 0.08,
+                                    fit: BoxFit.contain,
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                 ),
                                 Spacer(),
-                                CustomImageButton(path: 'assets/6735312.jpg'),
+                                CustomImageButton(path: 'assets/smile.png'),
                                 CustomImageButton(
-                                  path: 'assets/Right Icon.png',
+                                  path: 'assets/icon-1024x1024.png',
                                 ),
                               ],
                             ),

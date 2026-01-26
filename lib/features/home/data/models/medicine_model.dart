@@ -5,6 +5,8 @@ class MedicineModel {
   final int amount;
   final DateTime endAt;
   final String alarmAt;
+  final String rebeatEvery;
+  String nextDose;
 
   MedicineModel({
     required this.name,
@@ -13,6 +15,8 @@ class MedicineModel {
     required this.amount,
     required this.endAt,
     required this.alarmAt,
+    required this.rebeatEvery,
+    required this.nextDose,
   });
 
   factory MedicineModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,8 @@ class MedicineModel {
       amount: int.parse(json['amount']),
       endAt: DateTime.parse(json['endAt']),
       alarmAt: json['alarmAt'],
+      rebeatEvery: json['rebeatEvery'],
+      nextDose: json['nextDose'],
     );
   }
 
@@ -34,6 +40,8 @@ class MedicineModel {
       'amount': model.amount.toString(),
       'endAt': model.endAt.toString(),
       'alarmAt': model.alarmAt,
+      'rebeatEvery': model.rebeatEvery,
+      'nextDose': model.nextDose,
     };
   }
 
@@ -45,5 +53,9 @@ class MedicineModel {
     } else {
       return false;
     }
+  }
+
+  void setNextDose(String date) {
+    nextDose = date;
   }
 }

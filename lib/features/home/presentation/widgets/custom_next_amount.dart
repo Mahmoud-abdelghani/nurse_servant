@@ -9,7 +9,7 @@ class CustomNextAmount extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: ScreenSize.height * 0.13,
-      backgroundColor: Color(0xffEFFAFF),
+      backgroundColor: Theme.of(context).disabledColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

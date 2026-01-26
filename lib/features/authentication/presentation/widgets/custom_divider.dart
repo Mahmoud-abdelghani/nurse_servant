@@ -10,13 +10,17 @@ class CustomDivider extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          color: Colors.grey,
+          color: Theme.of(context).dividerColor,
           height: ScreenSize.height * 0.0007,
           width: ScreenSize.width * 0.27,
         ),
-        Text('Or'),
+        Text(
+          Localizations.localeOf(context).languageCode == 'ar' ? 'أو' : 'Or',
+          style: TextStyle(color: Theme.of(context).hintColor),
+        ),
+
         Container(
-          color: Colors.grey,
+          color: Theme.of(context).dividerColor,
           height: ScreenSize.height * 0.0007,
           width: ScreenSize.width * 0.27,
         ),

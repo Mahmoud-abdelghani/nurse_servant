@@ -41,7 +41,9 @@ class _MedicineDetailsState extends State<MedicineDetails> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Medicine Removed',
+                Localizations.localeOf(context).languageCode == 'ar'
+                    ? 'إزالة الدواء'
+                    : 'Medicine Removed',
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: ColorGuide.mainColor,
@@ -55,7 +57,6 @@ class _MedicineDetailsState extends State<MedicineDetails> {
         return ModalProgressHUD(
           inAsyncCall: state is RemovingLoading,
           child: Scaffold(
-            backgroundColor: Colors.white,
             body: Stack(
               children: [
                 Container(
@@ -72,12 +73,18 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                       ScreenSize.height * 0.025,
                     ),
                     border: Border.all(color: Colors.grey),
-                    gradient: LinearGradient(
+                    gradient: SweepGradient(
                       colors: [
-                        Color.fromARGB(255, 227, 244, 252),
-                        Color.fromARGB(255, 247, 250, 252),
+                        Theme.of(context).cardColor,
+                        Theme.of(context).scaffoldBackgroundColor,
                       ],
                     ),
+                    // LinearGradient(
+                    // colors: [
+                    //   Theme.of(context).cardColor,
+                    //   Theme.of(context).scaffoldBackgroundColor,
+                    // ],
+                    // ),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -87,65 +94,90 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                           showCupertinoDialog(
                             context: context,
 
-                            builder: (context) => CupertinoAlertDialog(
-                              actions: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: ScreenSize.height * .012,
-                                  ),
-                                  child: CupertinoDialogAction(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      'No',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: ColorGuide.mainColor,
-                                        fontSize: ScreenSize.height * 0.025,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: ScreenSize.height * .012,
-                                  ),
-                                  child: CupertinoDialogAction(
-                                    onPressed: () {
-                                      BlocProvider.of<LoadFromHiveCubit>(
-                                        context,
-                                      ).removeElement(medicineModel);
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      'Yes',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: ColorGuide.mainColor,
-                                        fontSize: ScreenSize.height * 0.025,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-
-                              title: Text(
-                                'Deleting a Medicine',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: ScreenSize.height * 0.025,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            builder: (context) => CupertinoTheme(
+                              data: CupertinoThemeData(
+                                brightness: Theme.of(context).brightness,
                               ),
+                              child: CupertinoAlertDialog(
+                                actions: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: ScreenSize.height * .012,
+                                    ),
+                                    child: CupertinoDialogAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        Localizations.localeOf(
+                                                  context,
+                                                ).languageCode ==
+                                                'ar'
+                                            ? 'لا'
+                                            : 'No',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: ScreenSize.height * 0.025,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
 
-                              content: Text(
-                                'Are you sure you want to delete this medicine?',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: ScreenSize.height * 0.017,
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: ScreenSize.height * .012,
+                                    ),
+                                    child: CupertinoDialogAction(
+                                      onPressed: () {
+                                        BlocProvider.of<LoadFromHiveCubit>(
+                                          context,
+                                        ).removeElement(medicineModel);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        Localizations.localeOf(
+                                                  context,
+                                                ).languageCode ==
+                                                'ar'
+                                            ? 'نعم'
+                                            : 'Yes',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: ScreenSize.height * 0.025,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+
+                                title: Text(
+                                  Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'حذف دواء'
+                                      : 'Deleting a Medicine',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: ScreenSize.height * 0.025,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+
+                                content: Text(
+                                  Localizations.localeOf(
+                                            context,
+                                          ).languageCode ==
+                                          'ar'
+                                      ? 'هل أنت متأكد من رغبتك في حذف هذا الدواء؟'
+                                      : 'Are you sure you want to delete this medicine?',
+                                  style: TextStyle(
+                                    color: Theme.of(context).hintColor,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: ScreenSize.height * 0.017,
+                                  ),
                                 ),
                               ),
                             ),
@@ -153,16 +185,18 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                         },
                       ),
                       Divider(
-                        color: const Color.fromARGB(92, 158, 158, 158),
+                        color: Theme.of(context).dividerColor,
                         endIndent: ScreenSize.width * 0.12,
                         indent: ScreenSize.width * 0.12,
                       ),
                       Text(
-                        'Did you take your Medicine?',
+                        Localizations.localeOf(context).languageCode == 'ar'
+                            ? 'هل تناولت دوائك؟'
+                            : 'Did you take your Medicine?',
                         style: TextStyle(
-                          color: ColorGuide.mainColor,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w700,
-                          fontSize: ScreenSize.height * 0.025,
+                          fontSize: ScreenSize.height * 0.023,
                         ),
                       ),
                       Image.asset(
@@ -174,20 +208,29 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                       Text(
                         medicineModel.name,
                         style: TextStyle(
-                          color: ColorGuide.mainColor,
-                          fontSize: ScreenSize.height * 0.06,
+                          color: Theme.of(context).primaryColor,
+                          fontSize: ScreenSize.height * 0.045,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       CustomDatailsRow(
                         txt:
-                            '  Ends at ${DateFormat('hh:mm a, EEEE').format(medicineModel.endAt)}',
+                            Localizations.localeOf(context).languageCode == 'ar'
+                            ? '  ينتهى فى ${DateFormat('hh:mm a, EEEE').format(medicineModel.endAt)}'
+                            : '  Ends at ${DateFormat('hh:mm a, EEEE').format(medicineModel.endAt)}',
                         iconData: Icons.calendar_today_outlined,
                       ),
                       CustomDatailsRow(
                         txt:
                             '  ${medicineModel.amount} ${medicineModel.type}, ${medicineModel.dose}',
                         iconData: Icons.description_outlined,
+                      ),
+                      CustomDatailsRow(
+                        txt:
+                            Localizations.localeOf(context).languageCode == 'ar'
+                            ? '   الجرعة القادمه الساعة ${medicineModel.nextDose}'
+                            : '   Next dose at ${medicineModel.nextDose}',
+                        iconData: Icons.watch_later_outlined,
                       ),
                     ],
                   ),

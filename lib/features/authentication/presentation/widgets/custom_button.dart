@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:nurse_servant/core/utils/color_guide.dart';
 import 'package:nurse_servant/core/utils/screen_size.dart';
 
-
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key, required this.onTap, required this.txt, required this.active, required this.width, required this.height});
+  const CustomButton({
+    super.key,
+    required this.onTap,
+    required this.txt,
+    required this.active,
+    required this.width,
+    required this.height,
+  });
   final VoidCallback onTap;
   final String txt;
   final bool active;
@@ -13,10 +19,12 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      minWidth:width ,
+      minWidth: width,
       height: height,
       onPressed: onTap,
-      color: active ? ColorGuide.mainColor : Colors.white,
+      color: active
+          ? Theme.of(context).primaryColor
+          : Theme.of(context).scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(ScreenSize.height * 0.02),
         side: BorderSide(color: ColorGuide.mainColor),
@@ -26,7 +34,9 @@ class CustomButton extends StatelessWidget {
         style: TextStyle(
           fontSize: ScreenSize.height * 0.025,
           fontWeight: FontWeight.bold,
-          color: active ? Colors.white : ColorGuide.mainColor,
+          color: active
+              ? Theme.of(context).scaffoldBackgroundColor
+              : Theme.of(context).primaryColor,
         ),
       ),
     );

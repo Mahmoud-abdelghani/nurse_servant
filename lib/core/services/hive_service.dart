@@ -5,6 +5,7 @@ class HiveService {
   static late Box box;
   static Future<void> hiveBoxInitialization() async {
     box = await Hive.openBox('medicineTable');
+    
   }
 
   static void hiveStoreMedicine({required MedicineModel medicineModel}) {
