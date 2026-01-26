@@ -14,6 +14,7 @@ class CustomInputField extends StatelessWidget {
     this.isObsecured = false,
     this.onTap,
     this.validator,
+    this.focusNode
   });
   final GlobalKey<FormState> fieldKey;
   final String hint;
@@ -24,12 +25,14 @@ class CustomInputField extends StatelessWidget {
   bool isObsecured;
   VoidCallback? onTap;
   final FormFieldValidator<String>? validator;
+  FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: fieldKey,
       child: TextFormField(
+        focusNode: focusNode,
         style: TextStyle(color: Theme.of(context).hintColor),
         controller: fieldController,
         validator: validator,

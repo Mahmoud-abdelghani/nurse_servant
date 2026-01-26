@@ -9,7 +9,7 @@
 
     <application
 
-        android:label="nurse_servant"
+        android:label="جرعتك"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver" />

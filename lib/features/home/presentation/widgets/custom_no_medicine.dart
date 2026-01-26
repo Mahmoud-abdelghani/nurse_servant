@@ -66,9 +66,8 @@ class CustomNoMedicine extends StatelessWidget {
         ),
         SizedBox(height: ScreenSize.height * 0.035 * 2),
         TextButton(
-          onPressed: () {
-            BlocProvider.of<DataHandlingCubit>(context).syncAccount([]);
-            BlocProvider.of<AuthenticationCubit>(context).logout();
+          onPressed: () async {
+            await BlocProvider.of<DataHandlingCubit>(context).syncAccount([]);
           },
           child: Text(
             Localizations.localeOf(context).languageCode == 'ar'

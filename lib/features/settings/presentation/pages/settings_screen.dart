@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nurse_servant/core/services/supabase_service.dart';
 import 'package:nurse_servant/core/utils/screen_size.dart';
+import 'package:nurse_servant/features/home/data/models/medicine_model.dart';
+import 'package:nurse_servant/features/home/presentation/cubit/data_handling_cubit.dart';
 import 'package:nurse_servant/features/settings/cubit/localization_cubit.dart';
 import 'package:nurse_servant/features/settings/cubit/theme_cubit.dart';
 import 'package:nurse_servant/features/settings/presentation/widgets/custom_settings_widget.dart';
@@ -17,6 +19,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    List<dynamic> medicines =
+        ModalRoute.of(context)!.settings.arguments as List<dynamic>;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: ScreenSize.width * 0.018),
@@ -113,16 +117,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                   Divider(),
-                  CustomSettingsWidget(
-                    iconDataLeading: Icons.logout,
-                    title: Localizations.localeOf(context).languageCode == 'ar'
-                        ? 'تسجيل الخرج'
-                        : 'Log Out',
-                    subtitle:
-                        Localizations.localeOf(context).languageCode == 'ar'
-                        ? 'تسجيل الخروج من هذا الحساب'
-                        : 'Log out from this account',
-                    widgetTrailing: null,
+                  GestureDetector(
+                    onTap: () async {
+                      await Navigator.maybePop(context);
+                      await BlocProvider.of<DataHandlingCubit>(
+                        context,
+                      ).syncAccount(medicines);
+                    },
+                    child: CustomSettingsWidget(
+                      iconDataLeading: Icons.logout,
+                      title:
+                          Localizations.localeOf(context).languageCode == 'ar'
+                          ? 'تسجيل الخرج'
+                          : 'Log Out',
+                      subtitle:
+                          Localizations.localeOf(context).languageCode == 'ar'
+                          ? 'تسجيل الخروج من هذا الحساب'
+                          : 'Log out from this account',
+                      widgetTrailing: null,
+                    ),
                   ),
                 ],
               ),

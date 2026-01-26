@@ -11,20 +11,25 @@ part 'authentication_state.dart';
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit() : super(AuthenticationInitial());
 
+  bool googleFirstTime = true;
   Future<void> signInWithGoogle() async {
     try {
       emit(AuthenticationGoogleLoading());
-      final con = await SupabaseService.supabase.auth.signInWithOAuth(
-        OAuthProvider.google,
-        redirectTo: 'myapp://login-callback',
-      );
-      await SupabaseService.supabase.auth.onAuthStateChange.firstWhere(
-        (element) => element.session != null,
-      );
+  
+      if (googleFirstTime) {
+        final con = await SupabaseService.supabase.auth.signInWithOAuth(
+          OAuthProvider.google,
+          redirectTo: 'myapp://login-callback',
+        );
+        await SupabaseService.supabase.auth.onAuthStateChange.firstWhere(
+          (element) => element.session != null,
+        );
 
-      emit(AuthenticationGoogleSuccess());
+        emit(AuthenticationGoogleSuccess());
+      }
 
       log(SupabaseService.supabase.auth.currentSession.toString());
+      log('___________________________________________________________');
     } on Exception catch (e) {
       log(e.toString());
       emit(AuthenticationGoogleFail(message: e.toString()));
@@ -33,6 +38,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
   String gEmail = '';
   String gPassword = '';
+  bool firstReg = true;
   Future<void> register({
     required String email,
     required String password,
@@ -40,16 +46,20 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }) async {
     try {
       emit(RegisterLoading());
-      final AuthResponse res = await SupabaseService.supabase.auth.signUp(
-        email: email,
-        password: password,
-        data: {'name': name},
-        emailRedirectTo: 'myapp://login-callback',
-      );
-      gEmail = email;
-      gPassword = password;
+      log('regester!!!!!!!!!!!!!');
+      if (firstReg) {
+        final AuthResponse res = await SupabaseService.supabase.auth.signUp(
+          email: email,
+          password: password,
+          data: {'name': name},
+          emailRedirectTo: 'myapp://login-callback',
+        );
+        gEmail = email;
+        gPassword = password;
+        firstReg = firstReg;
 
-      emit(RegisterSuccess());
+        emit(RegisterSuccess());
+      }
     } on Exception catch (e) {
       emit(RegisterFail(message: e.toString()));
     }
@@ -59,10 +69,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   Future<void> login({required String email, required String password}) async {
     try {
       emit(LoginLoading());
+      log('login!!!!!!!!!!!!!');
       if (firstTime) {
         final AuthResponse res = await SupabaseService.supabase.auth
             .signInWithPassword(email: email, password: password);
-        firstTime = false;
         emit(LoginSuccess());
       }
     } on Exception catch (e) {
@@ -74,7 +84,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   Future<void> logout() async {
     try {
       emit(LogoutLoading());
+      log('func');
       firstTime = true;
+      googleFirstTime = true;
+      firstReg = true;
       await SupabaseService.supabase.auth.signOut();
       emit(LogoutSuccess());
     } catch (e) {

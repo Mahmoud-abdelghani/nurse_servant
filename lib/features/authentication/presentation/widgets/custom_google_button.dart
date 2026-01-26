@@ -10,8 +10,8 @@ class CustomGoogleButton extends StatelessWidget {
       onTap: ontap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: ScreenSize.height * 0.015,
-          horizontal: ScreenSize.width * 0.075,
+          vertical: ScreenSize.height * 0.02,
+          horizontal: ScreenSize.width * 0.1,
         ),
         alignment: Alignment.bottomCenter,
         decoration: BoxDecoration(
@@ -29,7 +29,7 @@ class CustomGoogleButton extends StatelessWidget {
                   : 'Sign in with Google',
               style: TextStyle(
                 color: Theme.of(context).hintColor,
-                fontSize: ScreenSize.height * 0.02,
+                fontSize: ScreenSize.height * 0.017,
               ),
             ),
           ],

@@ -209,7 +209,7 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                         medicineModel.name,
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontSize: ScreenSize.height * 0.06,
+                          fontSize: ScreenSize.height * 0.045,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -228,7 +228,7 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                       CustomDatailsRow(
                         txt:
                             Localizations.localeOf(context).languageCode == 'ar'
-                            ? '   الحرعة القادمه الساعة ${medicineModel.nextDose}'
+                            ? '   الجرعة القادمه الساعة ${medicineModel.nextDose}'
                             : '   Next dose at ${medicineModel.nextDose}',
                         iconData: Icons.watch_later_outlined,
                       ),

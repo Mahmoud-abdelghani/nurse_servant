@@ -32,9 +32,12 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                "Welcome back!",
+                Localizations.localeOf(context).languageCode == 'ar'
+                    ? 'مرحبًا بعودتك'
+                    : 'Welcome back!',
                 style: TextStyle(color: Colors.white),
               ),
+
               backgroundColor: ColorGuide.mainColor,
             ),
           );
@@ -61,6 +64,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                   padding: EdgeInsets.only(
                     top: ScreenSize.height * 0.071888,
                     left: ScreenSize.width * 0.06046,
+                    right: ScreenSize.width * 0.06046,
                   ),
                   child: GestureDetector(
                     onTap: () => Navigator.maybePop(context),
@@ -81,21 +85,39 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         SizedBox(height: ScreenSize.height * 0.0890557 * 2.5),
-                        CustomMainText(txt: 'Forgot Password?'),
+                        CustomMainText(
+                          txt:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'هل نسيت كلمة المرور؟'
+                              : 'Forgot Password?',
+                        ),
+
                         SizedBox(height: ScreenSize.height * 0.016094 * 2),
                         Text(
-                          'Don\'t worry! It occurs. Please enter the email address linked with your account.',
+                          Localizations.localeOf(context).languageCode == 'ar'
+                              ? 'لا تقلق، يحدث ذلك. من فضلك أدخل البريد الإلكتروني المرتبط بحسابك.'
+                              : 'Don\'t worry! It occurs. Please enter the email address linked with your account.',
                           style: TextStyle(
                             color: Theme.of(context).dividerColor,
                             fontSize: ScreenSize.height * 0.017,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+
                         SizedBox(height: ScreenSize.height * 0.016094 * 2),
                         CustomInputField(
                           fieldKey: passwordKey,
-                          hint: "Enter your new password",
-                          label: 'new password',
+                          hint:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'أدخل كلمة المرور الجديدة'
+                              : 'Enter your new password',
+                          label:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'كلمة المرور الجديدة'
+                              : 'New password',
                           fieldController: textEditingControllerPassword,
                           isPassword: true,
                           isObsecured: securedText,
@@ -107,10 +129,20 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           textInputType: TextInputType.text,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'This field is required';
+                              return Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'هذا الحقل مطلوب'
+                                  : 'This field is required';
                             } else if (value !=
                                 textEditingControllerConfirm.text) {
-                              return 'Reconfirm your password';
+                              return Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أعد تأكيد كلمة المرور'
+                                  : 'Reconfirm your password';
                             } else {
                               return null;
                             }
@@ -119,8 +151,16 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         SizedBox(height: ScreenSize.height * 0.026094),
                         CustomInputField(
                           fieldKey: confirmKey,
-                          hint: "Confirm Your Password",
-                          label: 'confirm password',
+                          hint:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'تأكيد كلمة المرور'
+                              : 'Confirm your password',
+                          label:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'تأكيد كلمة المرور'
+                              : 'Confirm password',
                           fieldController: textEditingControllerConfirm,
                           isPassword: true,
                           isObsecured: securedText,
@@ -132,10 +172,20 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           textInputType: TextInputType.text,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'This field is required';
+                              return Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'هذا الحقل مطلوب'
+                                  : 'This field is required';
                             } else if (value !=
                                 textEditingControllerPassword.text) {
-                              return 'Reconfirm your password';
+                              return Localizations.localeOf(
+                                        context,
+                                      ).languageCode ==
+                                      'ar'
+                                  ? 'أعد تأكيد كلمة المرور'
+                                  : 'Reconfirm your password';
                             } else {
                               return null;
                             }
@@ -143,17 +193,21 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         ),
                         SizedBox(height: ScreenSize.height * 0.026094),
                         CustomButton(
-                          onTap: () {
+                          onTap: () async {
                             if (passwordKey.currentState!.validate() &&
                                 confirmKey.currentState!.validate()) {
-                              BlocProvider.of<AuthenticationCubit>(
+                              await BlocProvider.of<AuthenticationCubit>(
                                 context,
                               ).resetPassword(
                                 newPassword: textEditingControllerPassword.text,
                               );
                             }
                           },
-                          txt: "Send Confirm",
+                          txt:
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? 'تأكيد'
+                              : 'Send Confirm',
                           active: true,
                           width: ScreenSize.width,
                           height: ScreenSize.height * 0.068,
@@ -164,12 +218,16 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                              "Remember Password?",
+                              Localizations.localeOf(context).languageCode ==
+                                      'ar'
+                                  ? 'تذكرت كلمة المرور؟'
+                                  : 'Remember Password?',
                               style: TextStyle(
                                 color: Theme.of(context).hintColor,
                                 fontSize: ScreenSize.height * 0.02,
                               ),
                             ),
+
                             TextButton(
                               onPressed: () {
                                 Navigator.of(
@@ -177,7 +235,10 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                                 ).pushNamed(LoginView.routeName);
                               },
                               child: Text(
-                                'Login',
+                                Localizations.localeOf(context).languageCode ==
+                                        'ar'
+                                    ? 'تسجيل الدخول'
+                                    : 'Login',
                                 style: TextStyle(
                                   color: ColorGuide.mainColor,
                                   fontSize: ScreenSize.height * 0.02,

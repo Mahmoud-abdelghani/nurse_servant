@@ -33,14 +33,20 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  bool firstTime = true;
+  bool firstLog = true;
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is LogoutSuccess) {
-          HiveService.clearBox();
-          Navigator.of(context).pushReplacementNamed(LoginView.routeName);
+          if (firstTime) {
+            firstTime = false;
+            log('Logout 2  ');
+            HiveService.clearBox();
+            Navigator.of(context).pushReplacementNamed(LoginView.routeName);
+          }
         } else if (state is LogoutFail) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -55,9 +61,13 @@ class _HomeViewState extends State<HomeView> {
       },
       builder: (context, state) {
         return BlocConsumer<DataHandlingCubit, DataHandlingState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is SyncUserSuccess) {
-              BlocProvider.of<AuthenticationCubit>(context).logout();
+              if (firstLog) {
+                log('sync 1');
+                firstLog = false;
+                await BlocProvider.of<AuthenticationCubit>(context).logout();
+              }
             } else if (state is SyncUserError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -157,21 +167,32 @@ class _HomeViewState extends State<HomeView> {
                         child: Column(
                           children: [
                             Spacer(flex: 2),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  'assets/farma.png',
-                                  width: ScreenSize.width * 0.15,
-                                  height: ScreenSize.height * 0.08,
-                                  fit: BoxFit.contain,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                Spacer(),
-                                CustomImageButton(path: 'assets/smile.png'),
-                                CustomImageButton(
-                                  path: 'assets/icon-1024x1024.png',
-                                ),
-                              ],
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/farma.png',
+                                    width: ScreenSize.width * 0.15,
+                                    height: ScreenSize.height * 0.08,
+                                    fit: BoxFit.contain,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  Spacer(),
+                                  CustomImageButton(path: 'assets/smile.png'),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(
+                                        SettingsScreen.routeName,
+                                        arguments: [],
+                                      );
+                                    },
+                                    child: CustomImageButton(
+                                      path: 'assets/icon-1024x1024.png',
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Divider(color: Theme.of(context).dividerColor),
                             Spacer(flex: 1),
@@ -203,27 +224,21 @@ class _HomeViewState extends State<HomeView> {
                             SizedBox(height: ScreenSize.height * 0.055),
                             Row(
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    BlocProvider.of<DataHandlingCubit>(
-                                      context,
-                                    ).syncAccount(state.mediciens);
-                                  },
-                                  child: Image.asset(
-                                    'assets/farma.png',
-                                    width: ScreenSize.width * 0.15,
-                                    height: ScreenSize.height * 0.08,
-                                    fit: BoxFit.contain,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
+                                Image.asset(
+                                  'assets/farma.png',
+                                  width: ScreenSize.width * 0.15,
+                                  height: ScreenSize.height * 0.08,
+                                  fit: BoxFit.contain,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 Spacer(),
                                 CustomImageButton(path: 'assets/smile.png'),
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.of(
-                                      context,
-                                    ).pushNamed(SettingsScreen.routeName);
+                                    Navigator.of(context).pushNamed(
+                                      SettingsScreen.routeName,
+                                      arguments: state.mediciens,
+                                    );
                                   },
                                   child: CustomImageButton(
                                     path: 'assets/icon-1024x1024.png',

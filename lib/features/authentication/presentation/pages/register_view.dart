@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -40,48 +42,49 @@ class _RegisterViewState extends State<RegisterView> {
     return BlocConsumer<DataHandlingCubit, DataHandlingState>(
       listener: (context, state) {
         if (state is CreatingNewUserError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                state.message,
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.red,
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(
+          //       state.message,
+          //       style: TextStyle(color: Colors.white),
+          //     ),
+          //     backgroundColor: Colors.red,
+          //   ),
+          // );
         } else if (state is CreatingNewUserSuccess) {
-          Navigator.pushNamed(context, HomeView.routeName);
+          // Navigator.pushNamed(context, HomeView.routeName);
         }
       },
       builder: (context, state) {
         return BlocConsumer<AuthenticationCubit, AuthenticationState>(
           listener: (context, state) {
             if (state is AuthenticationGoogleSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    Localizations.localeOf(context).languageCode == 'ar'
-                        ? 'تطبيق التمريض في خدمتك'
-                        : 'Nursing app at your service',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: ColorGuide.mainColor,
-                ),
-              );
-              BlocProvider.of<DataHandlingCubit>(context).creatNewUserOrFetch(
-                SupabaseService.supabase.auth.currentUser!.email!,
-              );
-              BlocProvider.of<LoadFromHiveCubit>(context).getDataFromHive();
+              // log('Google Reg');
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       Localizations.localeOf(context).languageCode == 'ar'
+              //           ? 'تطبيق التمريض في خدمتك'
+              //           : 'Nursing app at your service',
+              //       style: TextStyle(color: Colors.white),
+              //     ),
+              //     backgroundColor: ColorGuide.mainColor,
+              //   ),
+              // );
+              // BlocProvider.of<DataHandlingCubit>(context).creatNewUserOrFetch(
+              //   SupabaseService.supabase.auth.currentUser!.email!,
+              // );
+              // BlocProvider.of<LoadFromHiveCubit>(context).getDataFromHive();
             } else if (state is AuthenticationGoogleFail) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    state.message,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       state.message,
+              //       style: TextStyle(color: Colors.white),
+              //     ),
+              //     backgroundColor: Colors.red,
+              //   ),
+              // );
             } else if (state is RegisterSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -119,6 +122,7 @@ class _RegisterViewState extends State<RegisterView> {
                       padding: EdgeInsets.only(
                         top: ScreenSize.height * 0.071888,
                         left: ScreenSize.width * 0.06046,
+                        right: ScreenSize.width * 0.06046,
                       ),
                       child: GestureDetector(
                         onTap: () => Navigator.maybePop(context),
@@ -307,7 +311,7 @@ class _RegisterViewState extends State<RegisterView> {
                             SizedBox(height: ScreenSize.height * 0.016094),
 
                             CustomButton(
-                              onTap: () {
+                              onTap: ()async {
                                 if (emailKey.currentState!.validate() ||
                                     nameKey.currentState!.validate() ||
                                     passwordKey.currentState!.validate() ||
@@ -318,7 +322,7 @@ class _RegisterViewState extends State<RegisterView> {
                                     passwordKey.currentState!.validate() &&
                                     passwordConfirmationKey.currentState!
                                         .validate()) {
-                                  BlocProvider.of<AuthenticationCubit>(
+                              await    BlocProvider.of<AuthenticationCubit>(
                                     context,
                                   ).register(
                                     email: eamilController.text,
@@ -346,8 +350,8 @@ class _RegisterViewState extends State<RegisterView> {
                               height: ScreenSize.height * 0.016094 * 1.2,
                             ),
                             CustomGoogleButton(
-                              ontap: () {
-                                BlocProvider.of<AuthenticationCubit>(
+                              ontap: ()async {
+                              await  BlocProvider.of<AuthenticationCubit>(
                                   context,
                                 ).signInWithGoogle();
                               },

@@ -41,7 +41,7 @@ class DataHandlingCubit extends Cubit<DataHandlingState> {
     }
   }
 
-  Future<void> syncAccount(List<MedicineModel> medicinesList) async {
+  Future<void> syncAccount(List<dynamic> medicinesList) async {
     try {
       log('update');
       emit(SyncUserLoading());

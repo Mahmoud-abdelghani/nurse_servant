@@ -101,6 +101,7 @@ class AppRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       locale: context.watch<LocalizationCubit>().state,
       supportedLocales: [Locale('ar'), Locale('en')],
       localizationsDelegates: [

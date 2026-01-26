@@ -19,18 +19,27 @@ class LoadFromHiveCubit extends Cubit<LoadFromHiveState> {
     }
   }
 
-  void getDataFromHive() {
+  Future<void> getDataFromHive() async {
     try {
       emit(LoadFromHiveLoading());
+      log('prepare data : ');
       List<MedicineModel> medicines = HiveService.getMedicineStoredInAList();
-
+      log(medicines.length.toString());
       List<MedicineModel> upToDateMedicine = [];
+      log(upToDateMedicine.length.toString());
       try {
         if (medicines.isNotEmpty) {
-          upToDateMedicine = medicines
-              .where((element) => element.endAt.isAfter(DateTime.now()))
-              .toList();
-
+          for (var element in medicines) {
+            if (element.endAt.isAfter(DateTime.now())) {
+              upToDateMedicine.add(element);
+            }
+          }
+          if (upToDateMedicine.length > medicines.length) {
+            upToDateMedicine.removeLast();
+          }
+          log(upToDateMedicine.length.toString());
+          log('elmoktaaaaar');
+          log(upToDateMedicine.length.toString());
           for (var element in upToDateMedicine) {
             if (int.parse(element.nextDose.split(':').first) <
                 DateTime.now().hour) {
@@ -40,21 +49,15 @@ class LoadFromHiveCubit extends Cubit<LoadFromHiveState> {
                     '${int.parse(element.nextDose.split(':').first) + int.parse(element.rebeatEvery.split(':').first)}:${element.nextDose.split(':').last}';
               }
               if (int.parse(element.nextDose.split(':').first) >= 24) {
-                element.nextDose = element.alarmAt;
+                if (int.parse(element.nextDose.split(':').first) - 24 <= 2) {
+                  element.nextDose =
+                      '${int.parse(element.nextDose.split(':').first) - 24}:${element.nextDose.split(':').last}';
+                } else {
+                  element.nextDose = element.alarmAt;
+                }
               }
             }
           }
-
-          // for (var element in upToDateMedicine) {
-          //   element.nextDose =
-          //       int.parse(element.nextDose.split(':').first) >
-          //           DateTime.now().hour
-          //       ? element.nextDose
-          //       : '${(int.parse(element.nextDose.split(':').first) + int.parse(element.rebeatEvery.split(':').first))}:${element.nextDose.split(':').last}';
-          //   if (int.parse(element.nextDose.split(':').first) >= 24) {
-          //     element.nextDose = element.alarmAt;
-          //   }
-          // }
 
           upToDateMedicine.sort(
             (a, b) =>

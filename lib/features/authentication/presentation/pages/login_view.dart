@@ -35,10 +35,14 @@ class _LoginViewState extends State<LoginView> {
   TextEditingController textEditingControllerPassword = TextEditingController();
   bool isPasswordSecured = true;
 
+  bool isfistTime = true;
+
+  bool isfirstLoad = true;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DataHandlingCubit, DataHandlingState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is CreatingNewUserError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -50,36 +54,46 @@ class _LoginViewState extends State<LoginView> {
             ),
           );
         } else if (state is CreatingNewUserSuccess) {
-          for (var item in state.jsons) {
-            BlocProvider.of<LoadFromHiveCubit>(
-              context,
-            ).storeInHive(MedicineModel.fromJson(item));
+          if (isfirstLoad) {
+            isfirstLoad = false;
+            for (var item in state.jsons) {
+              BlocProvider.of<LoadFromHiveCubit>(
+                context,
+              ).storeInHive(MedicineModel.fromJson(item));
+            }
+            log('CreatingNewUserSuccess');
+            await BlocProvider.of<LoadFromHiveCubit>(context).getDataFromHive();
+            log('Done');
+            Navigator.pushReplacementNamed(context, HomeView.routeName);
           }
-
-          BlocProvider.of<LoadFromHiveCubit>(context).getDataFromHive();
-
-          Navigator.pushReplacementNamed(context, HomeView.routeName);
         }
       },
       builder: (context, state) {
         return BlocConsumer<AuthenticationCubit, AuthenticationState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is AuthenticationGoogleSuccess || state is LoginSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    Localizations.localeOf(context).languageCode == 'ar'
-                        ? 'مرحبًا بك في Nurse Servant'
-                        : 'Welcome to Nurse Servant',
-                    style: TextStyle(color: Colors.white),
+              if (isfistTime) {
+                isfistTime = false;
+                log('Google Login');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      Localizations.localeOf(context).languageCode == 'ar'
+                          ? 'مرحبًا بك في Nurse Servant'
+                          : 'Welcome to Nurse Servant',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: ColorGuide.mainColor,
                   ),
-                  backgroundColor: ColorGuide.mainColor,
-                ),
-              );
-              BlocProvider.of<DataHandlingCubit>(context).creatNewUserOrFetch(
-                SupabaseService.supabase.auth.currentUser!.email!,
-              );
+                );
+                await BlocProvider.of<DataHandlingCubit>(
+                  context,
+                ).creatNewUserOrFetch(
+                  SupabaseService.supabase.auth.currentUser!.email!,
+                );
+              }
             } else if (state is AuthenticationGoogleFail) {
+              isfistTime = true;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
@@ -90,6 +104,7 @@ class _LoginViewState extends State<LoginView> {
                 ),
               );
             } else if (state is LoginFail) {
+              isfistTime = true;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
@@ -114,6 +129,7 @@ class _LoginViewState extends State<LoginView> {
                       padding: EdgeInsets.only(
                         top: ScreenSize.height * 0.071888,
                         left: ScreenSize.width * 0.06046,
+                        right: ScreenSize.width * 0.06046,
                       ),
                       child: GestureDetector(
                         onTap: () => Navigator.maybePop(context),
@@ -245,7 +261,7 @@ class _LoginViewState extends State<LoginView> {
                             ),
                             CustomButton(
                               onTap: () async {
-                                BlocProvider.of<AuthenticationCubit>(
+                                await BlocProvider.of<AuthenticationCubit>(
                                   context,
                                 ).login(
                                   email: textEditingControllerEmail.text,
@@ -267,8 +283,8 @@ class _LoginViewState extends State<LoginView> {
                             CustomDivider(),
                             SizedBox(height: ScreenSize.height * 0.016094 * 2),
                             CustomGoogleButton(
-                              ontap: () {
-                                BlocProvider.of<AuthenticationCubit>(
+                              ontap: () async {
+                                await BlocProvider.of<AuthenticationCubit>(
                                   context,
                                 ).signInWithGoogle();
                               },

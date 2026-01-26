@@ -27,13 +27,16 @@ class WelcomeView extends StatelessWidget {
               fit: BoxFit.fill,
             ),
             Text(
-              "Welcome To",
+              Localizations.localeOf(context).languageCode == 'ar'
+                  ? 'مرحبًا بك في'
+                  : 'Welcome To',
               style: TextStyle(
                 color: Theme.of(context).primaryColorDark,
                 fontSize: ScreenSize.height * 0.0439914163090129,
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             Text(
               "MediMinder",
               style: TextStyle(
@@ -42,8 +45,11 @@ class WelcomeView extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             Text(
-              'Your personal assistant for managing your medication schedule.',
+              Localizations.localeOf(context).languageCode == 'ar'
+                  ? 'مساعدك الشخصي لإدارة مواعيد أدويتك.'
+                  : 'Your personal assistant for managing your medication schedule.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
@@ -51,16 +57,20 @@ class WelcomeView extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
+
             SizedBox(height: ScreenSize.height * 0.0643),
             CustomButton(
               onTap: () {
                 Navigator.of(context).pushReplacementNamed(LoginView.routeName);
               },
-              txt: 'Log In',
+              txt: Localizations.localeOf(context).languageCode == 'ar'
+                  ? 'تسجيل الدخول'
+                  : 'Log In',
               active: true,
               width: ScreenSize.width,
               height: ScreenSize.height * 0.07,
             ),
+
             SizedBox(height: ScreenSize.height * 0.01609),
             CustomButton(
               onTap: () {
@@ -68,11 +78,14 @@ class WelcomeView extends StatelessWidget {
                   context,
                 ).pushReplacementNamed(RegisterView.routeName);
               },
-              txt: 'Register',
+              txt: Localizations.localeOf(context).languageCode == 'ar'
+                  ? 'إنشاء حساب'
+                  : 'Register',
               active: false,
               width: ScreenSize.width,
               height: ScreenSize.height * 0.07,
             ),
+
             Spacer(),
           ],
         ),

@@ -18,7 +18,7 @@ class WorkManagerService {
     Workmanager().registerPeriodicTask(
       'Medicine_Alarms',
       'Medicine_Alarms',
-      frequency: Duration(minutes: 15),
+      frequency: Duration(hours: 1),
     );
   }
 }
@@ -40,9 +40,18 @@ void callbackDispatcher() {
               HiveService.getMedicineStoredInAList();
           List<MedicineModel> upToDateMedicine = [];
           if (medicines.isNotEmpty) {
-            upToDateMedicine = medicines
-                .where((element) => element.endAt.isAfter(DateTime.now()))
-                .toList();
+            for (var element in medicines) {
+              if (element.endAt.isAfter(DateTime.now())) {
+                upToDateMedicine.add(element);
+              }
+            }
+            // upToDateMedicine = medicines
+            //     .where((element) => element.endAt.isAfter(DateTime.now()))
+            //     .toList();
+            if (upToDateMedicine.length > medicines.length) {
+              upToDateMedicine.removeLast();
+            }
+            log(upToDateMedicine.length.toString());
 
             for (var element in upToDateMedicine) {
               if (int.parse(element.nextDose.split(':').first) <
@@ -53,7 +62,12 @@ void callbackDispatcher() {
                       '${int.parse(element.nextDose.split(':').first) + int.parse(element.rebeatEvery.split(':').first)}:${element.nextDose.split(':').last}';
                 }
                 if (int.parse(element.nextDose.split(':').first) >= 24) {
-                  element.nextDose = element.alarmAt;
+                  if (int.parse(element.nextDose.split(':').first) - 24 <= 2) {
+                    element.nextDose =
+                        '${int.parse(element.nextDose.split(':').first) - 24}:${element.nextDose.split(':').last}';
+                  } else {
+                    element.nextDose = element.alarmAt;
+                  }
                 }
               }
             }
